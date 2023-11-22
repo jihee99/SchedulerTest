@@ -4,9 +4,48 @@
 
 <mapper namespace="com.ex.laos.dao.DamDao">
 
+    <select id="getDamId" parameterType="String" resultType="map">
+        SELECT
+            TD.DAM_ID::varchar ,
+            TD.DAM_NM
+        FROM TEMP3.TBL_DAM TD
+        WHERE TD.DAM_NM = #{damName}
+    </select>
 
-
-
+    <insert id="insertDamObservationDtoList" parameterType="com.ex.laos.dto.dam.DamObservationDto">
+        INSERT INTO temp3.tbl_dam_obsrvn_hstry
+            (
+             dam_id,
+             obsrvn_ymd,
+             wl,
+             vol,
+             inflow,
+             pg,
+             fsp,
+             fg,
+             fto,
+             tofl,
+             twl,
+             rf
+             )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+             #{item.damId}::uuid,
+             TO_DATE(#{item.obsrvnYmd}, 'yyyy-MM-dd'),
+             #{item.wl}::numeric ,
+             #{item.vol}::numeric ,
+             #{item.inflow}::numeric ,
+             #{item.pg}::numeric ,
+             #{item.fsp}::numeric ,
+             #{item.fg}::numeric ,
+             #{item.fto}::numeric ,
+             #{item.tofl}::numeric ,
+             #{item.twl}::numeric ,
+             #{item.rf}::numeric
+            )
+        </foreach>
+    </insert>
 
 
 </mapper>

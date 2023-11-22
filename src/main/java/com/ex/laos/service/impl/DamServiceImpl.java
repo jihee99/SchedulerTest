@@ -10,9 +10,13 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import com.ex.laos.dao.DamDao;
 import com.ex.laos.dto.dam.DamObservationDto;
@@ -44,6 +48,7 @@ public class DamServiceImpl implements DamService {
 
 			ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
 
+			String damId = findDamId(selected);
 			if (sheet != null) {
 				System.out.println("Sheet Name: " + selected);
 
@@ -58,51 +63,57 @@ public class DamServiceImpl implements DamService {
 					Row row = rowIterator.next();
 
 					DamObservationDto damObservationDto = new DamObservationDto();
+					damObservationDto.setDamId(damId);
 
 					int cellIndex = 0;
 					// 각 셀별로 반복
 					for (Cell cell : row) {
-						// Set values based on cell index
 						String cellValue = getCellValueAsString(cell, evaluator);
 						switch (cellIndex) {
 							case 0:
 								damObservationDto.setObsrvnYmd(cellValue);
 								break;
 							case 1:
-								damObservationDto.setWl(cellValue);
+								damObservationDto.setWl(handleNullCellValue(cellValue));
 								break;
 							case 2:
-								damObservationDto.setVol(cellValue);
+								damObservationDto.setVol(handleNullCellValue(cellValue));
 								break;
 							case 3:
-								damObservationDto.setInflow(cellValue);
+								damObservationDto.setInflow(handleNullCellValue(cellValue));
 								break;
 							case 4:
-								damObservationDto.setPg(cellValue);
+								damObservationDto.setPg(handleNullCellValue(cellValue));
 								break;
 							case 5:
-								damObservationDto.setFsp(cellValue);
+								damObservationDto.setFsp(handleNullCellValue(cellValue));
 								break;
 							case 6:
-								damObservationDto.setFg(cellValue);
+								damObservationDto.setFg(handleNullCellValue(cellValue));
 								break;
 							case 7:
-								damObservationDto.setFto(cellValue);
+								damObservationDto.setFto(handleNullCellValue(cellValue));
 								break;
 							case 8:
-								damObservationDto.setTofl(cellValue);
+								damObservationDto.setTofl(handleNullCellValue(cellValue));
 								break;
 							case 9:
-								damObservationDto.setTwl(cellValue);
+								damObservationDto.setTwl(handleNullCellValue(cellValue));
 								break;
 							case 10:
-								damObservationDto.setRf(cellValue);
+								damObservationDto.setRf(handleNullCellValue(cellValue));
 								break;
 						}
-
+						cellIndex++;
 					}
 					damObservationDtoArrayList.add(damObservationDto);
+
+					if(row.getRowNum() % 1000 == 0) {
+						damDao.insertDamObservationDtoList(damObservationDtoArrayList);
+						damObservationDtoArrayList.clear();
+					}
 				}
+				damDao.insertDamObservationDtoList(damObservationDtoArrayList);
 
 			} else {
 				System.out.println("Sheet not found: " + selected);
@@ -124,7 +135,9 @@ public class DamServiceImpl implements DamService {
 				return cell.getStringCellValue();
 			case NUMERIC:
 				if (DateUtil.isCellDateFormatted(cell)) {
-					return cell.getDateCellValue().toString();
+					Date dateValue = cell.getDateCellValue();
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					return dateFormat.format(dateValue);
 				} else {
 					return Double.toString(cell.getNumericCellValue());
 				}
@@ -134,10 +147,12 @@ public class DamServiceImpl implements DamService {
 				try {
 					switch (cell.getCachedFormulaResultType()){
 						case STRING:
-							return cell.getStringCellValue();
+							String formulaResult = cell.getStringCellValue();
+							return formulaResult != null ? formulaResult : "0";
 						case NUMERIC:
 							Double doubleValue = cell.getNumericCellValue();
 							return Double.toString(doubleValue);
+
 					}
 				} catch (NotImplementedFunctionException e) {
 					return "NotImplementedFunctionException: " + e.getMessage();
@@ -159,11 +174,20 @@ public class DamServiceImpl implements DamService {
 		return null;
 	}
 
+	private static String handleNullCellValue(String cellValue){
+		return (cellValue != null && !cellValue.isEmpty()) ? cellValue : "0";
+		// return (cellValue != null) ? cellValue : "0";
+	}
 
 	private String findDamId(String damName){
-		Map<String, String> result = damDao.getDamId(damName);
-		System.out.println(result);
 
-		return "";
+		String adjustedDamName = damName.replace("Nam", "Nam ");
+		if(damName.equals("NamLik12")){
+			adjustedDamName = "Nam Lik 1/2";
+		}
+
+		Map<String, String> result = damDao.getDamId(adjustedDamName);
+
+		return result.get("dam_id");
 	}
 }
