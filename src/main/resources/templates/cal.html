@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}"
+>
+<head>
+    <title>cal test</title>
+    <link rel="stylesheet" th:href="@{~/css/cal.css}" />
+</head>
+<body>
+<th:block layout:fragment="content_body">
+    <div class="page d-flex">
+        <div class="side-menu p-3">
+            <div class="card mx-auto text-center" style="width: 22rem;">
+                <img src="http://192.168.3.212:8080/images/img.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">우리 할매 순대 국밥</h5>
+                    <p class="card-text">
+                        <span class="badge rounded-pill bg-secondary">산업</span>
+                        <span class="badge rounded-pill bg-secondary">서비스산업</span>
+                        <span class="badge rounded-pill bg-secondary">기타서비스</span>
+                        <span class="badge rounded-pill bg-secondary">미분류</span>
+                        <span class="badge rounded-pill bg-secondary">미분류</span>
+                    </p>
+                    <p class="card-text my-4">현재 할매 국밥이라고 불리는 가게들의 원조격이라 할 수 있는 곳이다. </p>
+                    <div class="d-flex mt-5 justify-content-between">
+                        <a href="#" class="btn btn-sm btn-outline-success">경로 찾기</a>
+                        <a href="#" class="btn btn-sm btn-outline-primary">로드뷰</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <p>sdfsdffsdf</p>
+        </div>
+    </div>
+
+
+
+
+</th:block>
+
+<th:block layout:fragment="page_js">
+
+    <script>
+
+
+
+
+    </script>
+</th:block>
+</body>
+</html>

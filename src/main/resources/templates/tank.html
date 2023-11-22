@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--  Bootstrap  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <!--  Tabulator  -->
+    <link href="https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.1.0/css/tabulator_bootstrap4.min.css" integrity="sha512-/GYZ3SBJgM64mbqQoA7FwzRTxS4s3uKtsIAkjXcS3i7GegGtOUVdv9VhiDRlEOJ/iSmVjSAHl87EhGmtaSUKcA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <link th:href="@{~/css/global.css}" rel="stylesheet">
+    <link th:href="@{~/css/tank.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="m-5 container ">
+        <div>
+            <span class="fw-bold fs-5">Long-Term estimated inflow</span>
+        </div>
+<!--        <form name="excelform" enctype="multipart/form-data" method="post" action="/runTank">-->
+<!--        <form name="excelform" enctype="multipart/form-data" method="get">-->
+        <div class="rounded border mt-3 p-3" style="left: 371px; top: 152px; width: 900px;  display: flex; align-items: center;">
+            <div class="p-3" style="flex: 2;">
+                <form name = "excelform" id="excelform">
+                <div style="display: inline-block;">
+                    <span class="h6">Dam</span>
+                </div>
+                <div class="w-50" style="display: inline-block;">
+                    <select class="w-100 form-select form-select-sm" id="floatingSelect" name="floatingSelect">
+                        <option class="selected" value="NamNgum1">Nam Ngum 1</option>
+                        <option value="NamNgum2">Nam Ngum 2</option>
+                        <option value="NamNgum3">Nam Ngum 3</option>
+                        <option value="NamNgum4">Nam Ngum 4</option>
+                        <option value="NamNgum5">Nam Ngum 5</option>
+                        <option value="NamSong">Nam Song</option>
+                        <option value="NamLeuk">Nam Leuk</option>
+                        <option value="NamLik1">Nam Lik1</option>
+                        <option value="NamLik12">Nam Lik1/2</option>
+                        <option value="NamMang3">Nam Mang 3</option>
+                        <option value="NamPhay">Nam Phay</option>
+                    </select>
+                </div>
+
+                <div class="filebox mt-3" style="display: flex;">
+                    <input class="upload-name" value="첨부파일" placeholder="첨부파일">
+                    <label class="border" for="file">파일찾기</label>
+                    <input name="file" type="file" id="file">
+                </div>
+                </form>
+
+            </div>
+            <div id="serch-box" style="flex: 1; display: flex; justify-content: flex-end;">
+                <button id="tank-button" class="py-4 border" style=" color: #5F5F5F; width: 105px;">Search</button>
+            </div>
+        </div>
+        <div id="content-box" class="content" style="display: none">
+            <div class="pt-3">
+                <div id="summary-1">
+                    <table class="table table-horizontal">
+                        <tr>
+                            <th class="text-center" colspan="2">Runoff ratio</th>
+                            <th id="ratio" class="text-center fs-bold" colspan="2"></th>
+                        </tr>
+                        <tr>
+                            <td class="text-center">Sum of areal rainfall</td>
+                            <td id="sum_of_areal_rainfall" class="text-center"></td>
+                            <td class="text-center">Sum of observed flow depth</td>
+                            <td id="sum_of_observed_flow_depth"  class="text-center"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">Sum of computed flow depth</td>
+                            <td id="sum_of_computed_flow_depth" class="text-center"></td>
+                            <td class="text-center">Sum of evapotranspiration</td>
+                            <td id="sum_of_evapotranspiration" class="text-center"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="pt-3">
+                    <table class="table">
+                        <tr>
+                            <td>OBS. MEAN</td>
+                            <td id="obs_mean"></td>
+                            <td>OBS. SDEV.</td>
+                            <td id="obs_sdev"></td>
+                            <td>SIM. MEAN</td>
+                            <td id="sim_mean"></td>
+                            <td>SIM. SDEV.</td>
+                            <td id="sim_sdev"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="pt-3">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a id="chartDivBtn" class="nav-link active" href="#">Daily</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="chartDivMonthlyBtn" class="nav-link" href="#">Monthly</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div id="chartDiv" style="width: 100%; height:400px;"></div>
+                    <div id="inflowList"></div>
+                </div>
+                <div>
+                    <div id="chartDivMonthly" style="display:none; width: 100%; height:400px;"></div>
+                    <div id="inflowMonthlyList" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="pt-3">-->
+<!--            <div id="summary-1">-->
+<!--                <table class="table table-horizontal">-->
+<!--                    <tr>-->
+<!--                        <th class="text-center" colspan="2">Runoff ratio</th>-->
+<!--                        <th id="ratio" class="text-center fs-bold" colspan="2"></th>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td class="text-center">Sum of areal rainfall</td>-->
+<!--                        <td id="sum_of_areal_rainfall" class="text-center"></td>-->
+<!--                        <td class="text-center">Sum of observed flow depth</td>-->
+<!--                        <td id="sum_of_observed_flow_depth"  class="text-center"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td class="text-center">Sum of computed flow depth</td>-->
+<!--                        <td id="sum_of_computed_flow_depth" class="text-center"></td>-->
+<!--                        <td class="text-center">Sum of evapotranspiration</td>-->
+<!--                        <td id="sum_of_evapotranspiration" class="text-center"></td>-->
+<!--                    </tr>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--            <div class="pt-3">-->
+<!--                <table class="table">-->
+<!--                    <tr>-->
+<!--                        <td>OBS. MEAN</td>-->
+<!--                        <td id="obs_mean"></td>-->
+<!--                        <td>OBS. SDEV.</td>-->
+<!--                        <td id="obs_sdev"></td>-->
+<!--                        <td>SIM. MEAN</td>-->
+<!--                        <td id="sim_mean"></td>-->
+<!--                        <td>SIM. SDEV.</td>-->
+<!--                        <td id="sim_sdev"></td>-->
+<!--                    </tr>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="pt-3">-->
+<!--            <div>-->
+<!--                <ul class="nav nav-tabs">-->
+<!--                    <li class="nav-item">-->
+<!--                        <a id="chartDivBtn" class="nav-link active" href="#">Daily</a>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <a id="chartDivMonthlyBtn" class="nav-link" href="#">Monthly</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <div id="chartDiv" style="width: 100%; height:400px;"></div>-->
+<!--                <div id="inflowList"></div>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <div id="chartDivMonthly" style="display:none; width: 100%; height:400px;"></div>-->
+<!--                <div id="inflowMonthlyList" style="display:none;"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha512-YUkaLm+KJ5lQXDBdqBqk7EVhJAdxRnVdT2vtCzwPHSweCzyMgYV/tgGF4/dCyqtCC2eCphz0lRQgatGVdfR0ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+    <script th:src="@{~/js/lib/amchart/amcharts.js}"></script>
+    <script th:src="@{~/js/lib/amchart/serial.js}"></script>
+    <script th:src="@{~/js/lib/amchart/radar.js}"></script>
+
+    <script th:src="@{~/js/tank.js}"></script>
+</body>
+</html>
