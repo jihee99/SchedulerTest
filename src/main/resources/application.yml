@@ -1,0 +1,46 @@
+spring:
+  datasource:
+    hikari:
+      jdbc-url: jdbc:log4jdbc:postgresql://192.168.0.6:5432/laos
+      username: laos
+      password: laos00
+      #      jdbc-url: jdbc:log4jdbc:postgresql://localhost:5432/laos_test
+      #      username: postgres
+      #      password: postgres00
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  thymeleaf:
+    cache: false
+
+server:
+  port: 9990
+
+logging:
+  level:
+    root: info
+
+mybatis:
+  mapper-locations: /mapper/*.xml, /mapper/**/*.xml
+  configuration:
+    call-setters-on-nulls: true
+    map-underscore-to-camel-case: true
+
+model:
+  fard:
+    dir: D:/dev_etc/laos/fard/
+    result: D:/dev_etc/laos/fard/Result/
+    model: D:/dev_etc/laos/fard/Main_Fard.exe
+  tank:
+    dir: D:/dev_etc/laos/
+    template: D:/dev_etc/laos/tank/templates/
+    paramModel: D:/dev_etc/laos/tank/SMTankSim.exe
+  dam:
+    file: D:/dev_etc/laos/dam/
+  dmh:
+    dir: D:/SON/2023/00.DATA/dmh/
+    folders: Evaporation,Rainfall,Water Level
+
