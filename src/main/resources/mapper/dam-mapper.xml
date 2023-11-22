@@ -33,19 +33,66 @@
             (
              #{item.damId}::uuid,
              TO_DATE(#{item.obsrvnYmd}, 'yyyy-MM-dd'),
-             #{item.wl}::numeric ,
-             #{item.vol}::numeric ,
-             #{item.inflow}::numeric ,
-             #{item.pg}::numeric ,
-             #{item.fsp}::numeric ,
-             #{item.fg}::numeric ,
-             #{item.fto}::numeric ,
-             #{item.tofl}::numeric ,
-             #{item.twl}::numeric ,
-             #{item.rf}::numeric
+             #{item.wl} ,
+             #{item.vol} ,
+             #{item.inflow} ,
+             #{item.pg} ,
+             #{item.fsp} ,
+             #{item.fg} ,
+             #{item.fto} ,
+             #{item.tofl} ,
+             #{item.twl} ,
+             #{item.rf}
             )
         </foreach>
     </insert>
+
+    <update id="upsertLastFiveDaysDamObservationDtoList" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";">
+            INSERT INTO temp3.tbl_dam_obsrvn_hstry
+                (
+                dam_id,
+                obsrvn_ymd,
+                wl,
+                vol,
+                inflow,
+                pg,
+                fsp,
+                fg,
+                fto,
+                tofl,
+                twl,
+                rf
+                )
+            VALUES
+                (
+                #{item.damId}::uuid,
+                TO_DATE(#{item.obsrvnYmd}, 'yyyy-MM-dd'),
+                #{item.wl},
+                #{item.vol},
+                #{item.inflow},
+                #{item.pg},
+                #{item.fsp},
+                #{item.fg},
+                #{item.fto},
+                #{item.tofl},
+                #{item.twl},
+                #{item.rf}
+                )
+            ON CONFLICT (dam_id, obsrvn_ymd) DO UPDATE SET
+                wl = excluded.wl,
+                vol = excluded.vol,
+                inflow = excluded.inflow,
+                pg = excluded.pg,
+                fsp = excluded.fsp,
+                fg = excluded.fg,
+                fto = excluded.fto,
+                tofl = excluded.tofl,
+                twl = excluded.twl,
+                rf = excluded.rf
+        </foreach>
+    </update>
+
 
 
 </mapper>

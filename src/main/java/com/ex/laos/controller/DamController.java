@@ -1,32 +1,26 @@
 package com.ex.laos.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-import com.ex.laos.service.DamService;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-@RestController
-@RequiredArgsConstructor
-@RequestMapping("/dam")
+@Component
 public class DamController {
 
+	@Scheduled(cron = "0 0,30 9-12,14-17 * * *")
+	public void CronTest(){
 
-	private final DamService damService;
+		LocalDateTime localDateTime = LocalDateTime.now();
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
-	@GetMapping("/update1/{selected}")
-	public void registerAllData(@PathVariable("selected") String selected) {
-		damService.registerAllData(selected);
+
+
 	}
 
-	@PostMapping("/update2/{selected}")
-	public void upsertLastFiveDaysData(@PathVariable("selected") String selected){
-		damService.upsertLastFiveDaysData(selected);
-	}
+
+
+
+
 }

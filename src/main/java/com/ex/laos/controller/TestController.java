@@ -5,14 +5,35 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ex.laos.service.DamService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/damtest")
 public class TestController {
 
-	@Scheduled(cron = "0 5 * * * *")
-	public void CronTest(){
-		LocalDateTime localDateTime = LocalDateTime.now();
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-		System.out.println("test : " + localDateTime.format(dateTimeFormatter) );
+
+	private final DamService damService;
+
+	@GetMapping("/update1/{selected}")
+	public void registerAllData(@PathVariable("selected") String selected) {
+		damService.registerAllData(selected);
 	}
+
+	@GetMapping("/update2/{selected}")
+	public void upsertLastFiveDaysData(@PathVariable("selected") String selected){
+		damService.upsertLastFiveDaysData(selected);
+	}
+
 }

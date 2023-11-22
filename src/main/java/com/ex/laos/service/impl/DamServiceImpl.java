@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,42 +71,8 @@ public class DamServiceImpl implements DamService {
 					int cellIndex = 0;
 					// 각 셀별로 반복
 					for (Cell cell : row) {
-						String cellValue = getCellValueAsString(cell, evaluator);
-						switch (cellIndex) {
-							case 0:
-								damObservationDto.setObsrvnYmd(cellValue);
-								break;
-							case 1:
-								damObservationDto.setWl(handleNullCellValue(cellValue));
-								break;
-							case 2:
-								damObservationDto.setVol(handleNullCellValue(cellValue));
-								break;
-							case 3:
-								damObservationDto.setInflow(handleNullCellValue(cellValue));
-								break;
-							case 4:
-								damObservationDto.setPg(handleNullCellValue(cellValue));
-								break;
-							case 5:
-								damObservationDto.setFsp(handleNullCellValue(cellValue));
-								break;
-							case 6:
-								damObservationDto.setFg(handleNullCellValue(cellValue));
-								break;
-							case 7:
-								damObservationDto.setFto(handleNullCellValue(cellValue));
-								break;
-							case 8:
-								damObservationDto.setTofl(handleNullCellValue(cellValue));
-								break;
-							case 9:
-								damObservationDto.setTwl(handleNullCellValue(cellValue));
-								break;
-							case 10:
-								damObservationDto.setRf(handleNullCellValue(cellValue));
-								break;
-						}
+						// String cellValue = getCellValueAsString(cell, evaluator);
+						processCell(damObservationDto, cell, evaluator, cellIndex);
 						cellIndex++;
 					}
 					damObservationDtoArrayList.add(damObservationDto);
@@ -126,14 +95,112 @@ public class DamServiceImpl implements DamService {
 
 	@Override
 	public void upsertLastFiveDaysData(String selected) {
+		String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
+		try (FileInputStream fis = new FileInputStream(new File(excelPath));
+			 Workbook workbook = WorkbookFactory.create(fis)
+		) {
+			// 시트 이름으로 시트 가져오기
+			Sheet sheet = findSheetByName(workbook, selected);
 
+			FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+
+			ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
+
+			String damId = findDamId(selected);
+			if (sheet != null) {
+				System.out.println("Sheet Name: " + selected);
+
+				// 첫 번째 행은 헤더 행으로 간주하고 건너뜀
+				Iterator<Row> rowIterator = sheet.iterator();
+				if (rowIterator.hasNext()) {
+					rowIterator.next(); // 첫 번째 행 스킵
+				}
+
+				// 오늘 날짜부터 5일 전까지의 데이터 대상
+				LocalDate endDate = LocalDate.now();
+				LocalDate startDate = endDate.minusDays(5);
+
+				// 각 행별로 반복
+				while (rowIterator.hasNext()) {
+					Row row = rowIterator.next();
+
+					DamObservationDto damObservationDto = new DamObservationDto();
+					damObservationDto.setDamId(damId);
+
+					int cellIndex = 0;
+					// 각 셀별로 반복
+					for (Cell cell : row) {
+						// String cellValue = getCellValueAsString(cell, evaluator);
+						processCell(damObservationDto, cell, evaluator, cellIndex);
+						cellIndex++;
+					}
+
+					LocalDate obsrvnYmd = LocalDate.parse(damObservationDto.getObsrvnYmd(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+					if (obsrvnYmd.isAfter(startDate) && obsrvnYmd.isBefore(endDate) || obsrvnYmd.isEqual(endDate)) {
+						damObservationDtoArrayList.add(damObservationDto);
+						// upsertDamObservationData(damObservationDto);
+					}
+				}
+				damDao.upsertLastFiveDaysDamObservationDtoList(damObservationDtoArrayList);
+
+			} else {
+				System.out.println("Sheet not found: " + selected);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
+
+
+
+	private void processCell(DamObservationDto damObservationDto, Cell cell, FormulaEvaluator evaluator, int cellIndex) {
+		String cellValue = getCellValueAsString(cell, evaluator);
+		switch (cellIndex) {
+			case 0:
+				damObservationDto.setObsrvnYmd(cellValue);
+				break;
+			case 1:
+				damObservationDto.setWl(handleNullCellValue(cellValue));
+				break;
+			case 2:
+				damObservationDto.setVol(handleNullCellValue(cellValue));
+				break;
+			case 3:
+				damObservationDto.setInflow(handleNullCellValue(cellValue));
+				break;
+			case 4:
+				damObservationDto.setPg(handleNullCellValue(cellValue));
+				break;
+			case 5:
+				damObservationDto.setFsp(handleNullCellValue(cellValue));
+				break;
+			case 6:
+				damObservationDto.setFg(handleNullCellValue(cellValue));
+				break;
+			case 7:
+				damObservationDto.setFto(handleNullCellValue(cellValue));
+				break;
+			case 8:
+				damObservationDto.setTofl(handleNullCellValue(cellValue));
+				break;
+			case 9:
+				damObservationDto.setTwl(handleNullCellValue(cellValue));
+				break;
+			case 10:
+				damObservationDto.setRf(handleNullCellValue(cellValue));
+				break;
+		}
+	}
+
+
 
 	private static String getCellValueAsString(Cell cell, FormulaEvaluator evaluator) {
 		switch (cell.getCellType()) {
 			case STRING:
 				return cell.getStringCellValue();
 			case NUMERIC:
+
 				if (DateUtil.isCellDateFormatted(cell)) {
 					Date dateValue = cell.getDateCellValue();
 					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -174,10 +241,18 @@ public class DamServiceImpl implements DamService {
 		return null;
 	}
 
-	private static String handleNullCellValue(String cellValue){
-		return (cellValue != null && !cellValue.isEmpty()) ? cellValue : "0";
-		// return (cellValue != null) ? cellValue : "0";
+	private static BigDecimal handleNullCellValue(String cellValue) {
+		if (cellValue != null && !cellValue.isEmpty()) {
+			try {
+				return new BigDecimal(cellValue);
+			} catch (NumberFormatException e) {
+				return BigDecimal.ZERO;
+			}
+		} else {
+			return BigDecimal.ZERO;
+		}
 	}
+
 
 	private String findDamId(String damName){
 
