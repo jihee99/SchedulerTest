@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -85,7 +86,55 @@ public class DamServiceImpl2 implements DamService {
 
 	@Override
 	public void uploadPreviousData(String selected, int previousDays) {
+		String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
+		try (ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(excelPath)))) {
 
+			Sheet sheet = findSheetByName(workbook, selected);
+
+			ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
+
+			String damId = findDamId(selected);
+			if (sheet != null) {
+				System.out.println("Sheet Name: " + selected);
+
+				// 각 행별로 반복
+				// 단 첫 번째 행 제외
+				try (Stream<Row> rowStream = sheet.openStream().skip(1)) {
+					// 오늘 날짜부터 5일 전까지의 데이터 대상
+					LocalDate endDate = LocalDate.now();
+					// LocalDate endDate = endDate2.minusDays(previousDays);
+					LocalDate startDate = endDate.minusDays(previousDays);
+
+					rowStream.forEach(row -> {
+						DamObservationDto damObservationDto = new DamObservationDto();
+						damObservationDto.setDamId(damId);
+
+						int cellIndex = 0;
+						// 각 셀별로 반복
+						for (Cell cell : row) {
+							processCell(damObservationDto, cell, cellIndex);
+							cellIndex++;
+						}
+
+						LocalDate obsrvnYmd = LocalDate.parse(damObservationDto.getObsrvnYmd(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+						if (obsrvnYmd.isAfter(startDate) && obsrvnYmd.isBefore(endDate) || obsrvnYmd.isEqual(endDate)) {
+							damObservationDtoArrayList.add(damObservationDto);
+							System.out.println(damObservationDto);
+						}
+
+					});
+					damDao.upsertLastFiveDaysDamObservationDtoList(damObservationDtoArrayList);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println("Sheet not found: " + selected);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void processCell(DamObservationDto damObservationDto, Cell cell, int cellIndex) {

@@ -33,7 +33,8 @@ public class TestController {
 
 	@GetMapping("/update2/{selected}")
 	public void upsertLastFiveDaysData(@PathVariable("selected") String selected){
-		damService.upsertLastFiveDaysData(selected);
+		int previousDays = 5;
+		damService.uploadPreviousData(selected, previousDays);
 	}
 
 }

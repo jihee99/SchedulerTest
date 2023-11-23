@@ -4,6 +4,6 @@ public interface DamService {
 
 	void registerAllData(String selected);
 
-	void upsertLastFiveDaysData(String selected);
+	void uploadPreviousData(String selected, int previousDays);
 
 }
