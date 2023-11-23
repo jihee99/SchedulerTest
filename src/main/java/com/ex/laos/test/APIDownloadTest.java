@@ -26,7 +26,7 @@ public class APIDownloadTest {
 	private static final String OUTPUT_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
 	@Value("${model.dam.file}")
-	private static String FILE_PAHT;
+	private static String filePath;
 
 	public static void main(String[] args) throws Exception {
 
@@ -49,7 +49,8 @@ public class APIDownloadTest {
 			try {
 				Drive.Files.Export export = service.files().export(f.getId(), OUTPUT_MIME_TYPE);
 
-				String downloadFilePath = FILE_PAHT + getCurrentDateTime();
+				// String downloadFilePath = filePath + getCurrentDateTime() + ".xlsx";
+				String downloadFilePath = "D:\\dev_etc\\laos\\dam\\" + getCurrentDateTime() +".xlsx";
 
 				try(FileOutputStream fos = new FileOutputStream(downloadFilePath)) {
 					export.executeMediaAndDownloadTo(fos);

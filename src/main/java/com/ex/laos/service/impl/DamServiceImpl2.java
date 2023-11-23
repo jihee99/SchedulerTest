@@ -85,9 +85,9 @@ public class DamServiceImpl2 implements DamService {
 	}
 
 	@Override
-	public void uploadPreviousData(String selected, int previousDays) {
-		String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
-		try (ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(excelPath)))) {
+	public void uploadPreviousData(String filePath, String selected, int previousDays) {
+		// String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
+		try (ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(filePath)))) {
 
 			Sheet sheet = findSheetByName(workbook, selected);
 

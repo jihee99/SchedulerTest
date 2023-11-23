@@ -147,10 +147,11 @@
 // 					LocalDate obsrvnYmd = LocalDate.parse(damObservationDto.getObsrvnYmd(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 // 					if (obsrvnYmd.isAfter(startDate) && obsrvnYmd.isBefore(endDate) || obsrvnYmd.isEqual(endDate)) {
 // 						damObservationDtoArrayList.add(damObservationDto);
+// 						System.out.println(damObservationDto);
 // 						// upsertDamObservationData(damObservationDto);
 // 					}
 // 				}
-// 				damDao.upsertLastFiveDaysDamObservationDtoList(damObservationDtoArrayList);
+// 				// damDao.upsertLastFiveDaysDamObservationDtoList(damObservationDtoArrayList);
 //
 // 			} else {
 // 				System.out.println("Sheet not found: " + selected);
