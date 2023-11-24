@@ -31,10 +31,10 @@ public class TestController {
 		damService.registerAllData(selected);
 	}
 
-	@GetMapping("/update2/{selected}")
-	public void upsertLastFiveDaysData(@PathVariable("selected") String selected){
-		int previousDays = 5;
-		damService.uploadPreviousData(selected, previousDays);
-	}
+	// @GetMapping("/update2/{selected}")
+	// public void upsertLastFiveDaysData(@PathVariable("selected") String selected){
+	// 	int previousDays = 5;
+	// 	damService.uploadPreviousData(selected, previousDays);
+	// }
 
 }
