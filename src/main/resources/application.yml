@@ -17,7 +17,7 @@ spring:
     cache: false
 
 server:
-  port: 9990
+  port: 9900
 
 logging:
   level:
