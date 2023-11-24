@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.dhatim.fastexcel.reader.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -61,8 +60,7 @@ public class DamServiceImpl2 implements DamService {
 								cellIndex++;
 								continue;
 							}
-
-							processCell(damObservationDto, cell, cellIndex);
+							processCell(damObservationDto, cell, cellIndex-1);
 							cellIndex++;
 						}
 						damObservationDto.setRf(BigDecimal.ZERO);
@@ -194,37 +192,37 @@ public class DamServiceImpl2 implements DamService {
 	private void processCell(DamObservationDto damObservationDto, Cell cell, int cellIndex) {
 		String cellValue = getCellValueAsString(cell);
 		switch (cellIndex) {
-			case 1:
+			case 0:
 				damObservationDto.setObsrvnYmd(cellValue);
 				break;
-			case 2:
+			case 1:
 				damObservationDto.setWl(handleNullCellValue(cellValue));
 				break;
-			case 3:
+			case 2:
 				damObservationDto.setVol(handleNullCellValue(cellValue));
 				break;
-			case 4:
+			case 3:
 				damObservationDto.setInflow(handleNullCellValue(cellValue));
 				break;
-			case 5:
+			case 4:
 				damObservationDto.setPg(handleNullCellValue(cellValue));
 				break;
-			case 6:
+			case 5:
 				damObservationDto.setFsp(handleNullCellValue(cellValue));
 				break;
-			case 7:
+			case 6:
 				damObservationDto.setFg(handleNullCellValue(cellValue));
 				break;
-			case 8:
+			case 7:
 				damObservationDto.setFto(handleNullCellValue(cellValue));
 				break;
-			case 9:
+			case 8:
 				damObservationDto.setTofl(handleNullCellValue(cellValue));
 				break;
-			case 10:
+			case 9:
 				damObservationDto.setTwl(handleNullCellValue(cellValue));
 				break;
-			case 11:
+			case 10:
 				damObservationDto.setRf(handleNullCellValue(cellValue));
 				break;
 		}
