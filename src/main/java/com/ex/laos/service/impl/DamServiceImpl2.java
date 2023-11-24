@@ -34,6 +34,11 @@ public class DamServiceImpl2 implements DamService {
 	@Value("${model.dam.file}")
 	private String filePath;
 
+	/**
+	 * 	2022년 이전 관측 데이터를 업로드 하는 메서드
+	 *
+	 * 	@param selected  업로드 하고자 하는 댐 명칭 ( 시트 명으로 사용 )
+	 */
 	@Override
 	public void uploadOldDataToDatabase(String selected) {
 
@@ -78,7 +83,6 @@ public class DamServiceImpl2 implements DamService {
 
 			}
 
-
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		} catch (IOException e) {
@@ -88,6 +92,11 @@ public class DamServiceImpl2 implements DamService {
 	}
 
 
+	/**
+	 * 	전체 관측 데이터를 업로드 하는 메서드
+	 *
+	 * 	@param selected  업로드 하고자 하는 댐 명칭 ( 시트 명으로 사용 )
+	 */
 	@Override
 	public void registerAllData(String selected) {
 		String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
@@ -136,6 +145,13 @@ public class DamServiceImpl2 implements DamService {
 		}
 	}
 
+	/**
+	 * 다운로드 한 API 파일에서 선택된 댐 명칭 해당하는 이전 데이터를 데이터베이스에 입력하는 메서드
+	 *
+	 * @param filePath     API를 요청해 다운로드한 파일의 경로
+	 * @param selected     선택된 댐 명칭
+	 * @param previousDays 선택된 기준일로부터의 이전 날짜 범위 (일 수)
+	 */
 	@Override
 	public void uploadPreviousData(String filePath, String selected, int previousDays) {
 		// String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
