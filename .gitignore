@@ -21,6 +21,12 @@ target/
 
 # .gitignore 파일 내용
 mvnw.cmd
+apitest.git/
+#*.sample
+#exclude
+#config
+#description
+
 
 ### NetBeans ###
 /nbproject/private/
