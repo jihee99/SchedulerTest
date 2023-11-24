@@ -2,7 +2,6 @@ package com.ex.laos.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -36,72 +35,19 @@ public class DamServiceImpl2 implements DamService {
 	private String filePath;
 
 	@Override
-	public void uploadOldDataToDatabase(String selected) {
-
-		String excelPath = filePath + "NamMang3.xlsx";
-		try (
-			ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(excelPath)))
-		) {
-			Sheet sheet = workbook.getFirstSheet();
-			ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
-			String damId = findDamId(adjustDamNameForDatabase(selected));
-			if (sheet != null) {
-
-				// 첫 번째 행 제외 후 각 행 별로 반복
-				try (Stream<Row> rowStream = sheet.openStream().skip(1)) {
-					rowStream.forEach(row -> {
-						DamObservationDto damObservationDto = new DamObservationDto();
-						damObservationDto.setDamId(damId);
-
-						int cellIndex = 0;
-						// 각 셀별로 반복
-						for (Cell cell : row) {
-
-							if (cellIndex == 0) {
-								cellIndex++;
-								continue;
-							}
-
-							processCell(damObservationDto, cell, cellIndex);
-							cellIndex++;
-						}
-						damObservationDto.setRf(BigDecimal.ZERO);
-
-						damObservationDtoArrayList.add(damObservationDto);
-						if (row.getRowNum() % 1000 == 0) {
-							damDao.insertDamObservationDtoList(damObservationDtoArrayList);
-							damObservationDtoArrayList.clear();
-						}
-					});
-					if(!damObservationDtoArrayList.isEmpty() ){
-						damDao.insertDamObservationDtoList(damObservationDtoArrayList);
-					}
-				}
-
-			}
-
-
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
-	}
-
-
-	@Override
 	public void registerAllData(String selected) {
 		String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
 		try (ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(excelPath)))) {
 			// Get the sheet by name
 			Sheet sheet = findSheetByName(workbook, selected);
 
+
 			ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
 
-			String damId = findDamId(adjustDamNameForDatabase(selected));
+			String damId = findDamId(selected);
 			if (sheet != null) {
 				System.out.println("Sheet Name: " + selected);
+
 				// 각 행별로 반복
 				// 단 첫 번째 행 제외
 				try (Stream<Row> rowStream = sheet.openStream().skip(1)) {
@@ -147,7 +93,7 @@ public class DamServiceImpl2 implements DamService {
 
 			ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
 
-			String damId = findDamId(adjustDamNameForDatabase(selected));
+			String damId = findDamId(selected);
 			if (sheet != null) {
 				System.out.println("Sheet Name: " + selected);
 
@@ -194,37 +140,37 @@ public class DamServiceImpl2 implements DamService {
 	private void processCell(DamObservationDto damObservationDto, Cell cell, int cellIndex) {
 		String cellValue = getCellValueAsString(cell);
 		switch (cellIndex) {
-			case 1:
+			case 0:
 				damObservationDto.setObsrvnYmd(cellValue);
 				break;
-			case 2:
+			case 1:
 				damObservationDto.setWl(handleNullCellValue(cellValue));
 				break;
-			case 3:
+			case 2:
 				damObservationDto.setVol(handleNullCellValue(cellValue));
 				break;
-			case 4:
+			case 3:
 				damObservationDto.setInflow(handleNullCellValue(cellValue));
 				break;
-			case 5:
+			case 4:
 				damObservationDto.setPg(handleNullCellValue(cellValue));
 				break;
-			case 6:
+			case 5:
 				damObservationDto.setFsp(handleNullCellValue(cellValue));
 				break;
-			case 7:
+			case 6:
 				damObservationDto.setFg(handleNullCellValue(cellValue));
 				break;
-			case 8:
+			case 7:
 				damObservationDto.setFto(handleNullCellValue(cellValue));
 				break;
-			case 9:
+			case 8:
 				damObservationDto.setTofl(handleNullCellValue(cellValue));
 				break;
-			case 10:
+			case 9:
 				damObservationDto.setTwl(handleNullCellValue(cellValue));
 				break;
-			case 11:
+			case 10:
 				damObservationDto.setRf(handleNullCellValue(cellValue));
 				break;
 		}
@@ -298,14 +244,12 @@ public class DamServiceImpl2 implements DamService {
 		}
 	}
 
-	private String adjustDamNameForDatabase(String selected){
-		String adjustedDamName = selected.replace("Nam", "Nam ");
-		if(selected.equals("NamLik12")){
+	private String findDamId(String damName){
+
+		String adjustedDamName = damName.replace("Nam", "Nam ");
+		if(damName.equals("NamLik12")){
 			adjustedDamName = "Nam Lik 1/2";
 		}
-		return  adjustedDamName;
-	}
-	private String findDamId(String adjustedDamName){
 
 		Map<String, String> result = damDao.getDamId(adjustedDamName);
 

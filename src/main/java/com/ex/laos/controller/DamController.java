@@ -27,7 +27,7 @@ public class DamController {
 	}
 
 
-	@Scheduled(cron = "1 5 * * * ?")
+	@Scheduled(cron = "1 * * * * ?")
 	public void cronTest() {
 		// 테스트용 코드
 		LocalDateTime localDateTime = LocalDateTime.now();
