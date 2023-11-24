@@ -168,7 +168,7 @@ public class DamServiceImpl2 implements DamService {
 				// 각 행별로 반복
 				// 단 첫 번째 행 제외
 				try (Stream<Row> rowStream = sheet.openStream().skip(1)) {
-					// 오늘 날짜부터 5일 전까지의 데이터 대상
+					// 오늘 날짜부터 5일 전까지의(가변) 데이터 대상
 					LocalDate endDate = LocalDate.now();
 					// LocalDate endDate = endDate2.minusDays(previousDays);
 					LocalDate startDate = endDate.minusDays(previousDays);
