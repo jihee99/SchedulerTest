@@ -19,6 +19,9 @@ target/
 *.iml
 *.ipr
 
+# .gitignore 파일 내용
+mvnw.cmd
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
