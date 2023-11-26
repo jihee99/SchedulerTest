@@ -22,6 +22,7 @@ target/
 # .gitignore 파일 내용
 mvnw.cmd
 apitest.git/
+SchedulerTest.git/
 #*.sample
 #exclude
 #config
