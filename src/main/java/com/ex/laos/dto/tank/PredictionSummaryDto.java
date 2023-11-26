@@ -2,8 +2,6 @@ package com.ex.laos.dto.tank;
 
 import java.util.ArrayList;
 
-import com.ex.laos.dto.EstimateInflowVo;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EstimateSummaryDto {
+public class PredictionSummaryDto {
 
 	private String tankSimId;			// 시뮬레이션 아이디
 	private String damId;				// 댐 아이디
@@ -32,5 +30,5 @@ public class EstimateSummaryDto {
 	/**
 	 * 분리 할지 말지 고민해보기
 	 * */
-	private ArrayList<EstimateInflowVo> inflows;
+	private ArrayList<PredictionInflowDto> inflows;
 }

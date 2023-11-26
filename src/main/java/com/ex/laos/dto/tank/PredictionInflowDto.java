@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EstimateInflowDto {
+public class PredictionInflowDto {
 	private String date;
 	private String RMm;   //강우
 	private String QoCms;  //관측
