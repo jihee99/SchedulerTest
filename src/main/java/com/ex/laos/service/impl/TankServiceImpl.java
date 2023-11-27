@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ex.laos.dto.tank.EstimateSummaryDto;
+import com.ex.laos.dto.tank.PredictionSummaryDto;
 import com.ex.laos.service.TankService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,18 +17,18 @@ import lombok.extern.slf4j.Slf4j;
 public class TankServiceImpl implements TankService {
 
 	@Override
-	public EstimateSummaryDto generateTankInputFile(MultipartFile file, String floatingSelect) throws
+	public PredictionSummaryDto generateTankInputFile(MultipartFile file, String floatingSelect) throws
 		InterruptedException {
 		return null;
 	}
 
 	@Override
-	public EstimateSummaryDto generateTankInputFile2(String floatingSelect) throws InterruptedException {
+	public PredictionSummaryDto generateTankInputFile2(String floatingSelect) throws InterruptedException {
 		return null;
 	}
 
 	@Override
-	public EstimateSummaryDto readEstimateInflowModelResult(String fileName, String floatingSelect) {
+	public PredictionSummaryDto readEstimateInflowModelResult(String fileName, String floatingSelect) {
 		return null;
 	}
 

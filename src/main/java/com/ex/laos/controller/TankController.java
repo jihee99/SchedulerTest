@@ -1,9 +1,6 @@
 package com.ex.laos.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ex.laos.dto.tank.EstimateSummaryDto;
+import com.ex.laos.dto.tank.PredictionSummaryDto;
 import com.ex.laos.service.TankService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,10 +30,10 @@ public class TankController {
 	}
 
 	@PostMapping("/run1")
-	public EstimateSummaryDto runTank(@RequestPart MultipartFile file, @RequestParam("floatingSelect") String floatingSelect) throws InterruptedException {
+	public PredictionSummaryDto runTank(@RequestPart MultipartFile file, @RequestParam("floatingSelect") String floatingSelect) throws InterruptedException {
 		if (!file.isEmpty()) {
 			log.info("{}", floatingSelect);
-			EstimateSummaryDto es = tankService.generateTankInputFile(file, floatingSelect);
+			PredictionSummaryDto es = tankService.generateTankInputFile(file, floatingSelect);
 			return es;
 		}else{
 			log.info("File does not exist");
@@ -45,9 +42,9 @@ public class TankController {
 	}
 
 	@PostMapping("/run2")
-	public EstimateSummaryDto runTank(@RequestParam("floatingSelect") String floatingSelect) throws InterruptedException {
+	public PredictionSummaryDto runTank(@RequestParam("floatingSelect") String floatingSelect) throws InterruptedException {
 		log.info("{}", floatingSelect);
-		EstimateSummaryDto es = tankService.generateTankInputFile2(floatingSelect);
+		PredictionSummaryDto es = tankService.generateTankInputFile2(floatingSelect);
 		return es;
 	}
 
