@@ -1,16 +1,16 @@
 const tankResultTable = new Tabulator("#inflowList",{
-        layout:"fitColumns",
-        height: "100%",
-        placeholder: "모델이 실행되지 않았습니다.",
-        pagination:"local",
-        paginationSize:10,
-        paginationSizeSelector:[10,30,50,100],
-        columns: [
-            {title: "Date", field: "date"},
-            {title: "Predicted rainfall(mm)", field: "rmm"},
-            {title: "Estimated inflow(CMS).", field: "qsCms"}
-        ]
-    });
+    layout:"fitColumns",
+    height: "100%",
+    placeholder: "모델이 실행되지 않았습니다.",
+    pagination:"local",
+    paginationSize:10,
+    paginationSizeSelector:[10,30,50,100],
+    columns: [
+        {title: "Date", field: "date"},
+        {title: "Predicted rainfall(mm)", field: "rmm"},
+        {title: "Estimated inflow(CMS).", field: "qsCms"}
+    ]
+});
 const tankMonthlyResultTable = new Tabulator("#inflowMonthlyList",{
     layout:"fitColumns",
     height: "100%",
@@ -206,7 +206,7 @@ document.getElementById("tank-button").addEventListener('click', function (forma
     fd.append('floatingSelect', origin.get('floatingSelect'));
 
     let xhr = new XMLHttpRequest();
-    let url = '/tank2/run';
+    let url = '/tank/run2';
 
     xhr.open('POST', url, true);
     xhr.onload = function () {
