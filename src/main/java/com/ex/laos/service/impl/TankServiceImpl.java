@@ -41,6 +41,10 @@ public class TankServiceImpl implements TankService {
 	private String modelPath;
 
 
+	/**
+	 * 유역만 선택해 db에서 관측자료를 불러와 input 파일 생성하는 메서드
+	 * @param floatingSelect 선택한 댐
+	 * */
 	@Override
 	public PredictionSummaryDto generateTankInputFile2(String floatingSelect) throws
 		InterruptedException {
@@ -94,6 +98,11 @@ public class TankServiceImpl implements TankService {
 		return null;
 	}
 
+	/**
+	 * 관측 데이터를 입력받아 input 파일 생성하는 메서드
+	 * @param file 관측자료 (type : excel)
+	 * @param floatingSelect 선택한 유역(damId)
+	 * */
 	@Override
 	public PredictionSummaryDto generateTankInputFile(MultipartFile file, String floatingSelect) throws InterruptedException {
 		return null;
