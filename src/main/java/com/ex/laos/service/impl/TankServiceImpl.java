@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ex.laos.dao.DamDao;
 import com.ex.laos.dao.TankDao;
 import com.ex.laos.dto.tank.PredictionSummaryDto;
-import com.ex.laos.dto.tank.TankInputParametersDto;
 import com.ex.laos.service.TankService;
 
 import lombok.RequiredArgsConstructor;
