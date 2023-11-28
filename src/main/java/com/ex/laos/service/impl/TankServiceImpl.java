@@ -59,18 +59,23 @@ public class TankServiceImpl implements TankService {
 			String tmplPath = templatePath + floatingSelect; // floatingSelect 명으로 input 파일 생성
 
 			// 파일이 존재하지 않으면 기본 템플릿 내용 복사
-			// 기본 템플릿 내용 복사
-			// if (!file.exists()) {
-			// 	file.createNewFile();
+			// Path path = Paths.get(tmplPath);
+			// String fileContents = Files.readString(path, StandardCharsets.UTF_8);
+
+			String fileContents;
+			Path path = Paths.get(tmplPath);
+
+			if (Files.exists(path)) {
+				fileContents = Files.readString(path, StandardCharsets.UTF_8);
 				// stringBuilder.append(floatingSelect).append("\n")
 				// 				.append(floatingSelect).append(" watershed").append("\n")
 				// 				.append(String.format("%10s",tankInputParameters.get("evats_coeff")))
 				// 				.append(String.format("%10s",tankInputParameters.get("value_of_mask")))
 				// 				.append("   ").append(tankInputParameters.get("basin_area"));
-			// }
-
-			Path path = Paths.get(tmplPath);
-			String fileContents = Files.readString(path, StandardCharsets.UTF_8);
+			}else{
+				Path baseTmplatePath = Paths.get(templatePath,"base",floatingSelect);
+				fileContents = Files.readString(baseTmplatePath, StandardCharsets.UTF_8);
+			}
 
 			try (FileWriter writer = new FileWriter(tmplPath)) {
 				// tankInputParameters
