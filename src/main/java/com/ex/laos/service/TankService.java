@@ -15,5 +15,6 @@ public interface TankService {
 
 	void downloadTemplateFileByDam(HttpServletResponse response, String name);
 
+	String formatData(String data);
 
 }
