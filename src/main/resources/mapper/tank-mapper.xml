@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ex.laos.dao.TankDao">
+
+    <select id="getTankInputParametersByDamId" parameterType="String" resultType="map">
+        SELECT
+            xsi,
+            xai,
+            xbi,
+            xci,
+            xdi,
+            s1,
+            s2,
+            k1,
+            k2,
+            a2,
+            a1,
+            a0,
+            b1,
+            b0,
+            c1,
+            c0,
+            d1,
+            ha2,
+            ha1,
+            hb,
+            hc,
+            u1,
+            u2
+        FROM
+            temp3.tbl_tank_bsc_inpt_param ttbip
+        JOIN temp3.tbl_dam td ON ttbip.dam_id = td.dam_id
+        WHERE
+            ttbip.DAM_ID=#{DAMID}::UUID AND
+            ttbip.USE_YN = 'Y'
+        ORDER BY ttbip.REG_DT DESC
+        LIMIT 1
+    </select>
+
+
+</mapper>

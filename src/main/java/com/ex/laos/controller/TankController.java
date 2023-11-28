@@ -25,8 +25,7 @@ public class TankController {
 
 	@GetMapping("")
 	public ModelAndView tankPage() {
-		ModelAndView mav = new ModelAndView("tank2");
-		return mav;
+		return new ModelAndView("tank2");
 	}
 
 	@PostMapping("/run1")
@@ -43,7 +42,7 @@ public class TankController {
 
 	@PostMapping("/run2")
 	public PredictionSummaryDto runTank(@RequestParam("floatingSelect") String floatingSelect) throws InterruptedException {
-		log.info("{}", floatingSelect);
+		log.info("selected : {}", floatingSelect);
 		PredictionSummaryDto es = tankService.generateTankInputFile2(floatingSelect);
 		return es;
 	}
