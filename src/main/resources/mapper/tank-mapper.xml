@@ -39,5 +39,55 @@
         LIMIT 1
     </select>
 
+    <insert id="insertDamTankPredictionHistory" parameterType="com.example.laos.vo.EstimateSummaryVo" useGeneratedKeys="true" keyProperty="tankSimId" >
+        INSERT INTO temp3.tbl_dam_tank_pred_hstry
+        (tank_sim_id, dam_id, pred_bgng_ymd, pred_end_ymd, rf, runoff, evap, excn_dt, excn_rslt, fail_msg)
+        values
+            (uuid_generate_v4(),
+             #{damId}::uuid,
+             TO_DATE(#{predictionBeginYmd},'MM/DD/YYYY'),
+             TO_DATE(#{predictionEndYmd} ,'MM/DD/YYYY'),
+             #{realRainfall}::numeric ,
+             #{computedFlowDept}::numeric ,
+             #{evapotranspiration}::numeric ,
+             now(),
+             'S',
+             '')
+            RETURNING tank_sim_id;
+    </insert>
+
+    <insert id="insertDamTankPredictionSummary" parameterType="com.example.laos.vo.EstimateSummaryVo">
+        INSERT INTO temp3.tbl_dam_tank_pred_rslt_summary
+        (tank_sim_id, actl_rf_amt, obsrvn_fm_amt, calc_fm_amt, evats_amt, runoff_rt, obsrvn_mean, obsrvn_sd, sim_mean, sim_sd)
+        VALUES
+            (
+                #{tankSimId}::uuid,
+                #{realRainfall}::numeric,
+                #{observedFlowDept}::numeric,
+                #{computedFlowDept}::numeric,
+                #{evapotranspiration}::numeric,
+                #{ratio}::numeric,
+                #{obsMean}::numeric,
+                #{obsSdev}::numeric,
+                #{simMean}::numeric,
+                #{simSdev}::numeric)
+    </insert>
+
+    <insert id="insertDamTankPredictionResultOverwrite" parameterType="com.example.laos.vo.EstimateSummaryVo">
+        INSERT INTO temp3.tbl_dam_tank_pred_rslt_overwrite
+        (tank_sim_id, pred_ymd, rf, obs_val, calcs)
+        VALUES
+        <foreach collection="inflows" item="item" separator=",">
+            (
+            #{tankSimId}::uuid,
+            TO_DATE(#{item.date}, 'YYYY/MM/DD'),
+            #{item.RMm}::numeric,
+            #{item.QoCms}::numeric,
+            #{item.QsCms}::numeric
+            )
+        </foreach>
+    </insert>
+
+
 
 </mapper>
