@@ -11,8 +11,6 @@ public interface TankService {
 	PredictionSummaryDto generateTankInputFile(MultipartFile file, String floatingSelect) throws InterruptedException;
 	PredictionSummaryDto generateTankInputFile2(String floatingSelect) throws InterruptedException;
 
-	PredictionSummaryDto readEstimateInflowModelResult(String fileName, String floatingSelect);
-
 	void downloadTemplateFileByDam(HttpServletResponse response, String name);
 
 	String formatData(String data);

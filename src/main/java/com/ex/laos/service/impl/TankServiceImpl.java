@@ -2,9 +2,11 @@ package com.ex.laos.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -31,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ex.laos.dao.DamDao;
 import com.ex.laos.dao.TankDao;
+import com.ex.laos.dto.tank.PredictionInflowDto;
 import com.ex.laos.dto.tank.PredictionSummaryDto;
 import com.ex.laos.service.TankService;
 
@@ -140,10 +143,6 @@ public class TankServiceImpl implements TankService {
 		return null;
 	}
 
-	@Override
-	public PredictionSummaryDto readEstimateInflowModelResult(String fileName, String floatingSelect) {
-		return null;
-	}
 
 	@Override
 	public void downloadTemplateFileByDam(HttpServletResponse response, String name) {
@@ -268,5 +267,122 @@ public class TankServiceImpl implements TankService {
 		return String.format("%-" + adjustedWidth + "s", formattedValue);
 	}
 
+	private PredictionSummaryDto runModelAndReadResult(String fileName, String floatingSelect) throws IOException {
+		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", modelPath);
 
+		builder.directory(new File(dirPath + "\\tank\\"));
+		builder.redirectError(ProcessBuilder.Redirect.INHERIT);
+		builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+
+		Process proc = builder.start();
+
+		PrintWriter writer = new PrintWriter(proc.getOutputStream());
+		writer.write(fileName + "\n");
+		writer.flush();
+
+		int procResult = 0;
+		try {
+			procResult = proc.waitFor();
+			if(procResult == 0) { //성공
+				System.out.println("Model execution successful.");
+			} else {
+				System.out.println("Model execution failed.");
+			}
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+		// 모델 결과 파일 읽어오기
+		PredictionSummaryDto psd = parseModelExecutionResultsToPredictionSummaryDto(fileName, floatingSelect);
+		// 처리 완료 후 리턴
+		return psd;
+	}
+
+	private PredictionSummaryDto parseModelExecutionResultsToPredictionSummaryDto(String fileName, String floatingSelect){
+		PredictionSummaryDto psd = new PredictionSummaryDto();
+		try {
+
+			String damId = findDamId(adjustDamNameForDatabase(floatingSelect));
+			psd.setDamId(damId);
+
+			String adjustFileName = adjustFilename(fileName);
+			Path path = Paths.get(dirPath, "tank", adjustFileName + ".out");
+
+			List<String> lines = Files.readAllLines(path);
+
+			// 예측 시작일 - 종료일
+			int idx = 13;
+			String[] date = lines.get(idx).replaceAll("\\s\\s+", "").split(":")[1].split("-");
+
+			psd.setPredictionBeginYmd(date[0]);
+			psd.setPredictionEndYmd(date[1]);
+
+			idx += 12;
+
+			ArrayList<PredictionInflowDto> eilist = new ArrayList<>();
+
+			while (idx < lines.size()) {
+				String[] ls = lines.get(idx).replaceAll("\\s\\s+", "Q").split("Q");
+				PredictionInflowDto pid = new PredictionInflowDto();
+
+				pid.setDate(ls[0].replaceAll("\\s+", ""));
+				pid.setRMm(ls[1].startsWith("*****") ? "0.0" : ls[1] );
+				pid.setQoCms(ls[2].startsWith("*****") ? "0.0" : ls[2]);
+				pid.setQsCms(ls[3].startsWith("*****") ? "0.0" : ls[3]);
+
+				eilist.add(pid);
+				idx++;
+
+				if(idx < lines.size() && lines.get(idx).contains("-----")){
+					idx += 2;
+					break;
+				}
+			}
+
+			psd.setRealRainfall(handlingMissingValues(lines.get(idx)) ? "0.00" : lines.get(idx).trim().split("=")[1].trim());
+			psd.setObservedFlowDept(handlingMissingValues(lines.get(idx+1)) ? "0.00" : lines.get(idx+1).trim().split("=")[1].trim());
+			psd.setComputedFlowDept(handlingMissingValues(lines.get(idx+2)) ? "0.00" : lines.get(idx+2).trim().split("=")[1].trim());
+			psd.setEvapotranspiration(handlingMissingValues(lines.get(idx+3)) ? "0.00" : lines.get(idx+3).trim().split("=")[1].trim());
+
+			psd.setRatio(handlingMissingValues(lines.get(idx+6)) ? "0.00" : lines.get(idx+6).trim().split("=")[1].trim());
+
+			idx += 33;
+
+			psd.setObsMean(handlingMissingValues(lines.get(idx)) ? "0.000" : lines.get(idx++).trim().split("=")[1].trim());
+			psd.setObsSdev(handlingMissingValues(lines.get(idx)) ?  "0.000" : lines.get(idx++).trim().split("=")[1].trim());
+			psd.setSimMean(handlingMissingValues(lines.get(idx)) ? "0.000" : lines.get(idx++).split("=")[1].trim());
+			psd.setSimSdev(handlingMissingValues(lines.get(idx)) ? "0.000" : lines.get(idx).split("=")[1].trim());
+
+			psd.setInflows(eilist);
+
+			log.info("{}", psd);
+
+			tankDAO.insertDamTankPredictionHistory(psd);
+			tankDAO.insertDamTankPredictionSummary(psd);
+			tankDAO.insertDamTankPredictionResultOverwrite(psd);
+
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return psd;
+	}
+
+	private String adjustFilename(String fileName){
+		fileName.replace("/","");
+
+		int targetLength = 8;
+
+		String adjustFileName = String.format("%-" + targetLength + "s", fileName);
+		System.out.println(adjustFileName);
+		return adjustFileName;
+	}
+
+	private boolean handlingMissingValues(String value){
+		String checkValue = value.trim().split("=")[1].trim();
+		if(!checkValue.matches("^\\d.*")) {
+			return true;
+		}
+		return false;
+	}
 }
