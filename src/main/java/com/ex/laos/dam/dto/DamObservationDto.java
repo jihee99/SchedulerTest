@@ -1,4 +1,4 @@
-package com.ex.laos.dto.dam;
+package com.ex.laos.dam.dto;
 
 import java.math.BigDecimal;
 

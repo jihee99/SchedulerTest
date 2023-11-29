@@ -1,4 +1,4 @@
-package com.ex.laos.service.impl;
+package com.ex.laos.dam.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,9 +17,9 @@ import org.dhatim.fastexcel.reader.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.ex.laos.dao.DamDao;
-import com.ex.laos.service.DamService;
-import com.ex.laos.dto.dam.DamObservationDto;
+import com.ex.laos.dam.dao.DamDao;
+import com.ex.laos.dam.service.DamService;
+import com.ex.laos.dam.dto.DamObservationDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

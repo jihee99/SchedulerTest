@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ex.laos.dao.DamDao">
+<mapper namespace="com.ex.laos.dam.dao.DamDao">
 
     <select id="getDamId" parameterType="String" resultType="map">
         SELECT
@@ -12,7 +12,7 @@
         WHERE TD.DAM_NM = #{damName}
     </select>
 
-    <insert id="insertDamObservationDtoList" parameterType="com.ex.laos.dto.dam.DamObservationDto">
+    <insert id="insertDamObservationDtoList" parameterType="com.ex.laos.dam.dto.DamObservationDto">
         INSERT INTO temp3.tbl_dam_obsrvn_hstry
             (
              dam_id,

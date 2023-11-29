@@ -1,4 +1,4 @@
-package com.ex.laos.dto.tank;
+package com.ex.laos.tank.dto;
 
 import java.util.ArrayList;
 

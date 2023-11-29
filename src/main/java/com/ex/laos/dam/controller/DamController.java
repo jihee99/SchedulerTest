@@ -1,4 +1,4 @@
-package com.ex.laos.controller;
+package com.ex.laos.dam.controller;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ex.laos.service.APIService;
-import com.ex.laos.service.DamService;
+import com.ex.laos.dam.service.APIService;
+import com.ex.laos.dam.service.DamService;
 
 import lombok.extern.slf4j.Slf4j;
 

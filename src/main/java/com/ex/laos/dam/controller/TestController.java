@@ -1,16 +1,12 @@
-package com.ex.laos.controller;
+package com.ex.laos.dam.controller;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ex.laos.service.DamService;
+import com.ex.laos.dam.service.DamService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

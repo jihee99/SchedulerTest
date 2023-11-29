@@ -1,4 +1,4 @@
-package com.ex.laos.service;
+package com.ex.laos.dam.service;
 
 public interface DamService {
 

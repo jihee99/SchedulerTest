@@ -38,10 +38,10 @@ public class UserUtil {
 	}
 
 
-	public static boolean isUser() {
-		String role = UserUtil.getSevcAuthrt();
-		return role.equals("USER");
-	}
+	// public static boolean isUser() {
+	// 	String role = UserUtil.getSevcAuthrt();
+	// 	return role.equals("USER");
+	// }
 
 
 }

@@ -1,10 +1,10 @@
-package com.ex.laos.service;
+package com.ex.laos.tank.service;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ex.laos.dto.tank.PredictionSummaryDto;
+import com.ex.laos.tank.dto.PredictionSummaryDto;
 
 public interface TankService {
 

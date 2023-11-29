@@ -1,11 +1,11 @@
-package com.ex.laos.dao;
+package com.ex.laos.dam.dao;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.ex.laos.dto.dam.DamObservationDto;
+import com.ex.laos.dam.dto.DamObservationDto;
 
 @Mapper
 public interface DamDao {
