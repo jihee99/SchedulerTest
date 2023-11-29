@@ -297,7 +297,8 @@ public class TankServiceImpl implements TankService {
 		return psd;
 	}
 
-	private PredictionSummaryDto parseModelExecutionResultsToPredictionSummaryDto(String fileName, String floatingSelect){
+	private PredictionSummaryDto parseModelExecutionResultsToPredictionSummaryDto(String fileName, String floatingSelect) throws
+		RuntimeException {
 		PredictionSummaryDto psd = new PredictionSummaryDto();
 		try {
 
@@ -360,8 +361,6 @@ public class TankServiceImpl implements TankService {
 			tankDAO.insertDamTankPredictionSummary(psd);
 			tankDAO.insertDamTankPredictionResultOverwrite(psd);
 
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -370,11 +369,8 @@ public class TankServiceImpl implements TankService {
 
 	private String adjustFilename(String fileName){
 		fileName.replace("/","");
-
 		int targetLength = 8;
-
 		String adjustFileName = String.format("%-" + targetLength + "s", fileName);
-		System.out.println(adjustFileName);
 		return adjustFileName;
 	}
 
