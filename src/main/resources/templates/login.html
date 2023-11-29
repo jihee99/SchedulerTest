@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<body>
+    <div class="login-page">
+        <div class="form">
+            <form class="login-form" th:action="@{/login-process}" method="post" name="str" th:onsubmit="return validateForm()">
+                <h5 class="font-weight-bolder mt-5 mb-4">로그인</h5>
+                <input type="text" placeholder="아이디" name="username" id="username"/>
+                <input type="password" placeholder="비밀번호" name="password" id="password"/>
+                <div align="center" th:if="${param.error}">
+                    <p class="font-12 text-danger">아이디 혹은 비밀번호가 일치하지 않습니다.</p>
+                </div>
+                <button type="submit">login</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:src="@{/js/login.js}"></script>
+</body>
+</html>
