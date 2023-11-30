@@ -1,32 +1,35 @@
 package com.ex.laos.config;
 
+import com.ex.laos.common.service.CustomUserDetailsService;
 import com.ex.laos.common.service.LoginSuccessHandler;
-import com.ex.laos.common.util.SecurityUtil;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+	private final CustomUserDetailsService userDetailsService;
 
-	// SecurityFilterChain을 설정하는 빈
+
+	public SecurityConfig(CustomUserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
+
+	// 패스워드 인코더로 사용할 빈 등록
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	// SecurityFilterChain을 설정하는 빈 등록
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
@@ -58,29 +61,38 @@ public class SecurityConfig {
 				);
 
 		// 커스텀 필터 추가
-		http.addFilterAfter(new CustomHeaderFilter(), SecurityContextPersistenceFilter.class);
+		// http.addFilterAfter(new CustomHeaderFilter(), SecurityContextPersistenceFilter.class);
 
 		return http.build();// 설정된 HttpSecurity 객체 반환
 	}
 
+	@Bean
+	public DaoAuthenticationProvider daoAuthenticationProvider() throws Exception {
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+
+		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+		daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
+
+		return daoAuthenticationProvider;
+	}
 
 	// 커스텀 필터 클래스 정의
-	private class CustomHeaderFilter extends OncePerRequestFilter {
-		@Override
-		protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response, FilterChain filterChain) throws ServletException,IOException,IOException {
-//            if (SecurityUtil.isLoggedIn()) {
-//                response.setHeader("Custom-Header", "User is logged in");
-//            } else {
-//                response.setHeader("Custom-Header", "User is not logged in");
-//            }
-//            filterChain.doFilter(request, response);
-
-			if (SecurityUtil.isLoggedIn()) {
-				request.setAttribute("isLoggedIn",true);
-			} else {
-				request.setAttribute("isLoggedIn",false);
-			}
-			filterChain.doFilter(request,response);
-		}
-	}
+// 	private class CustomHeaderFilter extends OncePerRequestFilter {
+// 		@Override
+// 		protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response, FilterChain filterChain) throws ServletException,IOException,IOException {
+// //            if (SecurityUtil.isLoggedIn()) {
+// //                response.setHeader("Custom-Header", "User is logged in");
+// //            } else {
+// //                response.setHeader("Custom-Header", "User is not logged in");
+// //            }
+// //            filterChain.doFilter(request, response);
+//
+// 			if (SecurityUtil.isLoggedIn()) {
+// 				request.setAttribute("isLoggedIn",true);
+// 			} else {
+// 				request.setAttribute("isLoggedIn",false);
+// 			}
+// 			filterChain.doFilter(request,response);
+// 		}
+// 	}
 }

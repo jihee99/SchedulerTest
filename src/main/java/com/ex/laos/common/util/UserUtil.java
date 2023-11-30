@@ -2,7 +2,7 @@ package com.ex.laos.common.util;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.ex.laos.common.dto.UserDto;
+import com.ex.laos.common.dto.MemberFormDto;
 import com.ex.laos.common.service.CustomUserDetails;
 
 public class UserUtil {
@@ -11,9 +11,9 @@ public class UserUtil {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static UserDto getUserDto() {
+	public static MemberFormDto getUserDto() {
 		try {
-			return ((CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserDto();
+			return ((CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberFormDto();
 		} catch(NullPointerException | ClassCastException e) {
 			return null;
 		}
@@ -24,7 +24,7 @@ public class UserUtil {
 	 * @return 사용자 권한
 	 */
 	public static String getSevcAuthrt() {
-		UserDto userDto = UserUtil.getUserDto();
+		MemberFormDto userDto = UserUtil.getUserDto();
 		if(userDto != null) {
 			return userDto.getSevcAuthrtId();
 		}else{

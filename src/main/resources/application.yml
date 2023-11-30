@@ -22,6 +22,7 @@ server:
 logging:
   level:
     root: info
+#    com.ex.laos.common.dao.MemberDao: TRACE
 
 mybatis:
   mapper-locations: /mapper/*.xml, /mapper/**/*.xml

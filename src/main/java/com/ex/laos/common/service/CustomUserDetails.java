@@ -8,11 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.ex.laos.common.dto.UserDto;
+import com.ex.laos.common.dto.MemberFormDto;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
-	private final UserDto userDto;
+	private final MemberFormDto userDto;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -49,7 +49,9 @@ public class CustomUserDetails implements UserDetails {
 		return true;
 	}
 
-	public UserDto getUserDto() {
+	public MemberFormDto getMemberFormDto() {
 		return this.userDto;
 	}
+
+
 }
