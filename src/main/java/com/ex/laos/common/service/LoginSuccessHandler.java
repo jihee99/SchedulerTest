@@ -15,15 +15,15 @@ import java.io.IOException;
 
 public class LoginSuccessHandler  extends SimpleUrlAuthenticationSuccessHandler {
 
-	private RedirectStrategy redirectStratgy = new DefaultRedirectStrategy();
-	final private RequestCache requestCache = new HttpSessionRequestCache();
-	final private DefaultRedirectStrategy defaultRedirectStrategy = new DefaultRedirectStrategy();
+	private final RedirectStrategy redirectStratgy = new DefaultRedirectStrategy();
+	private final RequestCache requestCache = new HttpSessionRequestCache();
+	private final DefaultRedirectStrategy defaultRedirectStrategy = new DefaultRedirectStrategy();
 
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		System.out.println("d이걸 탔을까요?? 아닐까요~!@!~");
-		defaultRedirectStrategy.sendRedirect(request, response, "/ko");
+		defaultRedirectStrategy.sendRedirect(request, response, "/home");
 		try {
 			super.onAuthenticationSuccess(request, response, authentication);
 		} catch (ServletException e) {
