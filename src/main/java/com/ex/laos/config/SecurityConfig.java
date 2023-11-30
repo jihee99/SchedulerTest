@@ -36,7 +36,7 @@ public class SecurityConfig {
 				.cors().disable() // CORS 보안 설정 비활성화
 				.authorizeRequests(authorizeRequests ->
 					authorizeRequests
-						.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join-process").permitAll() // 특정 경로는 인증 없이 접근 허용
+						.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join/member").permitAll() // 특정 경로는 인증 없이 접근 허용
 						.anyRequest().authenticated() // 그 외의 요청은 인증 필요
 				)
 				// 로그인 설정

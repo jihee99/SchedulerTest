@@ -5,7 +5,7 @@
 <mapper namespace="com.ex.laos.common.dao.MemberDao">
 
 
-    <select id="findByUserId" parameterType="String" resultType="com.ex.laos.common.dto.MemberFormDto">
+    <select id="findByUserId" parameterType="String" resultType="com.ex.laos.common.dto.MemberDto">
         select
             tm.mbr_id,
             tm.pswd,
@@ -20,5 +20,25 @@
             tm.mbr_id = #{username}
     </select>
 
+    <insert id="insertMember" parameterType="com.ex.laos.common.dto.MemberDto">
+        INSERT INTO temp3.tbl_mbr
+            (mbr_id,
+             pswd,
+             nm,
+             telno,
+             ogdp,
+             stts,
+             reg_dt,
+             mdfr_id)
+        values
+            (#{mbrId},
+             #{pswd},
+             #{nm},
+             #{telno},
+             #{ogdp},
+             #{stts},
+             now(),
+             'SYSTEM'::character varying)
+    </insert>
 
 </mapper>

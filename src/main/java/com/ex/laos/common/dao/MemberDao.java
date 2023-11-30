@@ -1,16 +1,14 @@
 package com.ex.laos.common.dao;
 
-import java.util.Map;
-
 import org.apache.ibatis.annotations.Mapper;
 
-import com.ex.laos.common.dto.MemberFormDto;
+import com.ex.laos.common.dto.MemberDto;
 
 @Mapper
 public interface MemberDao {
 
-	void save(MemberFormDto member);
+	void insertMember(MemberDto member);
 
-	MemberFormDto findByUserId(String username);
+	MemberDto findByUserId(String username);
 
 }

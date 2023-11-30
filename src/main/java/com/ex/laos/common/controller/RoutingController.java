@@ -21,4 +21,8 @@ public class RoutingController {
 	public ModelAndView joinUsPage(){
 		return new ModelAndView("join");
 	}
+
+	@GetMapping("/home")
+	public ModelAndView home() { return new ModelAndView("home"); }
+
 }

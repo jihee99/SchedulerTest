@@ -1,6 +1,5 @@
 package com.ex.laos.common.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.Email;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class MemberFormDto{
+public class MemberDto {
 
 	@NotEmpty(message = "이메일은 필수 입력 값입니다.")
 	@Email(message = "이메일 형식으로 입력해주세요.")
@@ -41,5 +40,19 @@ public class MemberFormDto{
 	private String mdfrId;
 
 	private String sevcAuthrtId;	// 서비스 권한
+
+
+// 	@Builder
+// 	public MemberFormDto toEntity(String mbrId, String pswd, String nm, String telno, String ogdp, String stts, Date regDt, String sevcAuthrtId){
+// 		this.mbrId = mbrId;
+// 		this.pswd = pswd;
+// 		this.nm = nm;
+// 		this.telno = telno;
+// 		this.ogdp = ogdp;
+// 		this.stts = stts;
+// 		this.regDt = regDt;
+// 		this.sevcAuthrtId = sevcAuthrtId;
+// 	}
+
 
 }
