@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ex.laos.common.dao.MemberDao">
+
+
+    <select id="findByUserId" parameterType="String" resultType="com.ex.laos.common.dto.MemberFormDto">
+        select
+            tm.mbr_id,
+            tm.pswd,
+            tm.nm,
+            tm.telno,
+            tm.ogdp,
+            tm.stts,
+            tm.reg_dt
+        from
+            temp3.tbl_mbr tm
+        where
+            tm.mbr_id = #{username}
+    </select>
+
+
+</mapper>
