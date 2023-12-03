@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div class="form">
+        <form class="join-form" th:action="@{/update/pwd/process}" method="post" name="str" th:onsubmit="return validateForm()">
+            <div class="container">
+                <h5 class="font-weight-bolder mt-5 mb-4">비밀번호 변경</h5>
+                <div>
+                    <label for="currentPwd" style="margin-right: 20px; font-size: 0.83em;">현재 비밀번호</label>
+                    <input type="text" id="currentPwd" name="currentPwd" class="w-100" required>
+                </div>
+                <div>
+                    <label for="newPwd1" style="margin-right: 20px; font-size: 0.83em;">새 비밀번호</label>
+                    <input type="password" id="newPwd1" name="newPwd1" class="w-100" required>
+                </div>
+                <div>
+                    <label for="newPwd2" style="margin-right: 20px; font-size: 0.83em;">비밀번호 확인</label>
+                    <input type="text" id="newPwd2" name="newPwd2" required><br>
+                </div>
+                </br>
+                <button type="submit">확인</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+</body>
+</html>
