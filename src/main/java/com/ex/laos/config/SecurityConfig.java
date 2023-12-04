@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,35 +40,38 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-				.csrf().disable()
-				.cors().disable() // CORS 보안 설정 비활성화
+				// .csrf().disable()
+			.csrf()
+				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Use a cookie to store the CSRF token
+				.and()
+			.cors().disable() // CORS 보안 설정 비활성화
 				// .cors().and()
 				// .headers().frameOptions().sameOrigin().and()
-				.authorizeRequests(authorizeRequests ->
-					authorizeRequests
-						.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join/member").permitAll() // 특정 경로는 인증 없이 접근 허용
-						.anyRequest().authenticated() // 그 외의 요청은 인증 필요
-				)
+			.authorizeRequests(authorizeRequests ->
+				authorizeRequests
+					.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join/member").permitAll() // 특정 경로는 인증 없이 접근 허용
+					.anyRequest().authenticated() // 그 외의 요청은 인증 필요
+			)
 				// 로그인 설정
-				.formLogin(formLogin ->
-					formLogin
-						.loginPage("/login") // 로그인 페이지 설정
-						.loginProcessingUrl("/login-process") // 실제 로그인 처리 URL
-						.usernameParameter("username") // 사용자 이름 파라미터명
-						.passwordParameter("password") // 비밀번호 파라미터명
+			.formLogin(formLogin ->
+				formLogin
+					.loginPage("/login") // 로그인 페이지 설정
+					.loginProcessingUrl("/login-process") // 실제 로그인 처리 URL
+					.usernameParameter("username") // 사용자 이름 파라미터명
+					.passwordParameter("password") // 비밀번호 파라미터명
 //                                .defaultSuccessUrl(test(), true) // 로그인 성공 후 리다이렉트할 URL
-						.permitAll() // 로그인 페이지는 인증 없이 접근 허용
-						.successHandler(new LoginSuccessHandler())
-						.failureHandler((request, response, exception) -> {
-							System.out.println("exception: " + exception.getMessage());
-							response.sendRedirect("/login");
-						})
-				)
-				// 로그아웃 설정
-				.logout(logout ->
-					logout
-						.logoutSuccessUrl("/login") // 로그아웃 후 리다이렉트할 URL
-				);
+					.permitAll() // 로그인 페이지는 인증 없이 접근 허용
+					.successHandler(new LoginSuccessHandler())
+					.failureHandler((request, response, exception) -> {
+						System.out.println("exception: " + exception.getMessage());
+						response.sendRedirect("/login");
+					})
+			)
+			// 로그아웃 설정
+			.logout(logout ->
+				logout
+					.logoutSuccessUrl("/login") // 로그아웃 후 리다이렉트할 URL
+			);
 
 		// 커스텀 필터 추가
 		// http.addFilterAfter(new CustomHeaderFilter(), SecurityContextPersistenceFilter.class);

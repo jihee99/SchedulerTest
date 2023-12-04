@@ -3,48 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
-<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 <div>
     <div class="form">
-<!--        <form class="join-form" method="post" name="update">-->
-        <form class="join-form" th:action="@{/update/pwd/process}" method="post" name="update" th:onsubmit="return validateForm()">
-            <div class="container">
-                <h5 class="font-weight-bolder mt-5 mb-4">비밀번호 변경</h5>
+        <form class="join-form" method="post" name="update">
+<!--        <form class="join-form" th:action="@{/update/pwd/process2}" method="post" name="update" th:onsubmit="return validateForm()">-->
+<!--            <div class="container">-->
+<!--                <h5 class="font-weight-bolder mt-5 mb-4">비밀번호 변경</h5>-->
 
-<!-- type1 -->
-                <div>
-                    <label for="currentPwd" style="margin-right: 20px; font-size: 0.83em;">현재 비밀번호</label>
-                    <input type="password" id="currentPwd" name="currentPwd" class="w-100" required>
-                </div>
-                <div>
-                    <label for="newPwd1" style="margin-right: 33px; font-size: 0.83em;">새 비밀번호</label>
-                    <input type="password" id="newPwd1" name="newPwd1" class="w-100" required>
-                </div>
-                <div>
-                    <label for="newPwd2" style="margin-right: 20px; font-size: 0.83em;">비밀번호 확인</label>
-                    <input type="password" id="newPwd2" name="newPwd2" required><br>
-                </div>
-                </br>
-                <button type="submit">확인</button>
+<!--&lt;!&ndash; type1 &ndash;&gt;-->
+<!--                <div>-->
+<!--                    <label for="currentPwd" style="margin-right: 20px; font-size: 0.83em;">현재 비밀번호</label>-->
+<!--                    <input type="password" id="currentPwd" name="currentPwd" class="w-100" required>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <label for="newPwd1" style="margin-right: 33px; font-size: 0.83em;">새 비밀번호</label>-->
+<!--                    <input type="password" id="newPwd1" name="newPwd1" class="w-100" required>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <label for="newPwd2" style="margin-right: 20px; font-size: 0.83em;">비밀번호 확인</label>-->
+<!--                    <input type="password" id="newPwd2" name="newPwd2" required><br>-->
+<!--                </div>-->
+<!--                </br>-->
+<!--                <button type="submit">확인</button>-->
+<!--            </div>-->
 
 <!-- type2  -->
-<!--                <h5>가입한 이메일을 입력하시면, 비밀번호 변경 메일을 발송해드립니다.</h5>-->
-<!--                <div>-->
-<!--                    <label for="username" style="margin-right: 20px; font-size: 0.83em;">가입 이메일</label>-->
-<!--                    <input type="text" id="username" name="username">-->
-<!--                </div></br>-->
-<!--                <button type="submit">확인</button>-->
-            </div>
+                <h5>가입한 이메일을 입력하시면, 비밀번호 변경 메일을 발송해드립니다.</h5>
+                <div>
+                    <label for="username" style="margin-right: 20px; font-size: 0.83em;">가입 이메일</label>
+                    <input type="text" id="username" name="username">
+                </div></br>
+                <button type="submit">확인</button>
+
 
         </form>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha512-YUkaLm+KJ5lQXDBdqBqk7EVhJAdxRnVdT2vtCzwPHSweCzyMgYV/tgGF4/dCyqtCC2eCphz0lRQgatGVdfR0ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script type="text/javascript" th:src="@{/js/updatePwd.js}"></script>
 </body>
 </html>
