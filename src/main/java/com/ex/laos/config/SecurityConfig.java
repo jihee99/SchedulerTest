@@ -1,5 +1,7 @@
 package com.ex.laos.config;
 
+import javax.sql.DataSource;
+
 import com.ex.laos.common.service.CustomUserDetailsService;
 import com.ex.laos.common.service.LoginSuccessHandler;
 
@@ -9,19 +11,23 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
 	private final CustomUserDetailsService userDetailsService;
+	private final DataSource dataSource;
 
-
-	public SecurityConfig(CustomUserDetailsService userDetailsService) {
-		this.userDetailsService = userDetailsService;
-	}
+	// public SecurityConfig(CustomUserDetailsService userDetailsService) {
+	// 	this.userDetailsService = userDetailsService;
+	// }
 
 	// 패스워드 인코더로 사용할 빈 등록
 	@Bean
@@ -33,7 +39,10 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
+				.csrf().disable()
 				.cors().disable() // CORS 보안 설정 비활성화
+				// .cors().and()
+				// .headers().frameOptions().sameOrigin().and()
 				.authorizeRequests(authorizeRequests ->
 					authorizeRequests
 						.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join/member").permitAll() // 특정 경로는 인증 없이 접근 허용
@@ -75,6 +84,13 @@ public class SecurityConfig {
 
 		return daoAuthenticationProvider;
 	}
+
+	// @Bean
+	// public PersistentTokenRepository rememberMeTokenRepository() {
+	// 	JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+	// 	jdbcTokenRepository.setDataSource(dataSource);
+	// 	return jdbcTokenRepository;
+	// }
 
 	// 커스텀 필터 클래스 정의
 // 	private class CustomHeaderFilter extends OncePerRequestFilter {

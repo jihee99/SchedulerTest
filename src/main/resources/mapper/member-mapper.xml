@@ -41,4 +41,30 @@
              'SYSTEM'::character varying)
     </insert>
 
+<!--    <insert id="insertPasswordUpdateHistory" parameterType="string"  useGeneratedKeys="true" keyProperty="string">-->
+    <insert id="insertPasswordUpdateHistory" parameterType="map">
+        INSERT INTO temp3.tbl_pswd_chg_hstry
+            (pswd_chg_id,
+             mbr_id,
+             reg_dt,
+             pswd_chg_yn,
+             chg_dt,
+             expry_dt)
+        VALUES
+            (#{pswdChgId}::uuid,
+             #{username},
+             now(),
+             'N',
+             NULL,
+             now() + interval '24 hours')
+    </insert>
+
+    <update id="updatePasswordByUsername" parameterType="string">
+
+    </update>
+
+<!--    <resultMap id="pswdChangeResultMap" type="java.util.UUID">-->
+<!--        <id property="pswdChgId" column="pswd_chg_id"/>-->
+<!--    </resultMap>-->
+
 </mapper>

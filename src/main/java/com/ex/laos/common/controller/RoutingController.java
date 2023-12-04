@@ -31,4 +31,6 @@ public class RoutingController {
 
 	@GetMapping("/update/auth")
 	public ModelAndView updateAuth(){ return new ModelAndView("updateAuth"); }
+
+
 }
