@@ -24,6 +24,19 @@ logging:
     root: info
 #    com.ex.laos.common.dao.MemberDao: TRACE
 
+  mail:
+    # Google smtp server 사용
+    host: smtp.gmail.com
+    port: 587
+    username: oosoojh31@gmail.com
+    password: sqtupkwcndqbwpis
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
 mybatis:
   mapper-locations: /mapper/*.xml, /mapper/**/*.xml
   configuration:
