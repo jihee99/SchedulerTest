@@ -15,15 +15,6 @@ spring:
       enabled: true
   thymeleaf:
     cache: false
-
-server:
-  port: 9900
-
-logging:
-  level:
-    root: info
-#    com.ex.laos.common.dao.MemberDao: TRACE
-
   mail:
     # Google smtp server 사용
     host: smtp.gmail.com
@@ -36,6 +27,14 @@ logging:
           starttls:
             enable: true
           auth: true
+
+server:
+  port: 9900
+
+logging:
+  level:
+    root: info
+#    com.ex.laos.common.dao.MemberDao: TRACE
 
 mybatis:
   mapper-locations: /mapper/*.xml, /mapper/**/*.xml
