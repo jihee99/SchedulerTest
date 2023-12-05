@@ -73,7 +73,7 @@ public class MailServiceImpl implements MailService {
 		return  "<html><head><style>" +
 				".container { font-family: Arial, sans-serif; font-size: 13px; text-align: center; }" +
 				"a,a:visited { text-decoration: none; color: #00AE68;}" +
-				"a.button { display: inline-block; width: 120px; padding: 0; margin: 50px 10px 10px 0; font-weight: 600; text-align: center; line-height: 40px; color: #FFF; border-radius: 5px; transition: all 0.2s; }" +
+				"a.button { display: inline-block; width: 150px; padding: 0; margin: 50px 10px 10px 0; font-weight: 600; text-align: center; line-height: 40px; color: #FFF; border-radius: 5px; transition: all 0.2s; }" +
 				".realButton { background: #9f9f9f; }" +
 				".btnPush:hover { margin-top: 45px; margin-bottom: 5px; }" +
 				".clear { clear: both; }" +

@@ -4,15 +4,25 @@
     const headers = {}
     headers[_csrf_header] = _csrf;
 
+    let canSubmit = true;
+
     document.forms["update"].onsubmit = function(event) {
 
         event.preventDefault();
+
+        if (!canSubmit) {
+            alert("이전 요청 후 3분을 기다려주세요.");
+            return false;
+        }
 
         const username = document.forms["update"]["username"].value;
         if(username == ""){
             alert("가입한 이메일을 입력해주세요.");
             return false;
         } else{
+            canSubmit = false;
+            $("#submitBtn").prop("disabled", true);
+
             $.ajax({
                 type: "POST",
                 url: "/update/pwd/process2",
@@ -21,13 +31,23 @@
                     xhr.setRequestHeader(_csrf_header, _csrf);
                 },
                 success: function (response) {
+                    canSubmit = false;
                     console.log(response);
-                    // alert(response);
                     if (response.status === "success") {
+                        $("#submitBtn").prop("disabled", false);
                         alert(response.message);
                     } else {
+                        canSubmit = true;
+                        $("#submitBtn").prop("disabled", false);
                         alert(response.message);
                     }
+                    
+                    // 이전 요청으로부터 3분 제한
+                    setTimeout(function () {
+                        canSubmit = true;
+                        $("#submitBtn").prop("disabled", false);
+                    }, 3 * 60 * 1000);
+
                 },
                 error: function (xhr, status, error) {
                     alert(xhr.responseText);
