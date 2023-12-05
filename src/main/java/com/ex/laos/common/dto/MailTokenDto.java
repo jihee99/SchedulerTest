@@ -25,7 +25,7 @@ public class MailTokenDto {
 
 	private String rawPwd;
 	private String newPwd;
-
+	private String newPwdChk;
 
 	public static MailTokenDto createEmailId(String username, String pswdChgId) {
 		MailTokenDto emailToken = new MailTokenDto();
@@ -37,7 +37,6 @@ public class MailTokenDto {
 
 		return emailToken;
 	}
-
 
 	public void setTokenToUsed() {
 		this.pswdChgYn = 'Y';
