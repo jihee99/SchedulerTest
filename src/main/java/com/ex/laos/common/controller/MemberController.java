@@ -1,23 +1,24 @@
 package com.ex.laos.common.controller;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.ex.laos.common.dto.MailTokenDto;
 import com.ex.laos.common.dto.MemberDto;
 import com.ex.laos.common.service.CustomUserDetailsService;
 import com.ex.laos.common.service.MailService;
@@ -81,7 +82,7 @@ public class MemberController {
 
 	/**
 	 *  입력한 이메일로 링크 / form 전송해 비밀번호 변경하는 메서드
-	 *
+	 *	put으로 바꿔도 되는가
 	 * */
 	@PostMapping("/update/pwd/process2")
 	public Map<String, Object> updatePassword(
@@ -116,27 +117,45 @@ public class MemberController {
 		return response;
 	}
 
-	// public MimeMessage createMessage(String to)
-	// 	throws UnsupportedEncodingException, MessagingException {
-	// 	MimeMessage message = javaMailSender.createMimeMessage();
-	//
-	// 	message.addRecipients(MimeMessage.RecipientType.TO, to);
-	// 	message.setSubject("sbb 임시 비밀번호");
-	//
-	// 	String msgg = "";
-	// 	msgg += "<div style='margin:100px;'>";
-	// 	msgg +=
-	// 		"<div align='center' style='border:1px solid black; font-family:verdana';>";
-	// 	msgg += "<h3 style='color:blue;'>임시 비밀번호입니다.</h3>";
-	// 	msgg += "<div style='font-size:130%'>";
-	// 	msgg += "CODE : <strong>";
-	// 	msgg += ePw + "</strong><div><br/> ";
-	// 	msgg += "</div>";
-	// 	message.setText(msgg, "utf-8", "html");
-	// 	message.setFrom(new InternetAddress("jea5158@gmail.com", "sbb_Admin"));
-	//
-	// 	return message;
-	// }
+
+	@GetMapping("/password/reset")
+	public ModelAndView viewConfirmEmail(@RequestParam("token") String token, HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		MailTokenDto mailTokenDto = mailService.isTokenValid(token);
+
+		if(mailTokenDto != null){
+			// 비밀번호 변경 화면 반환
+			modelAndView.setViewName("updatePwdLink");
+			session.setAttribute("mailToken", mailTokenDto);
+		}else{
+			modelAndView.setViewName("invalidPage");
+		}
+		return modelAndView;
+	}
+	
+	
+	@PostMapping("/password/update-process")
+	public void updatePassword(
+		@RequestParam String rawPwd, @RequestParam String newPwd, @RequestParam String newPwdChk, HttpSession session
+	){
+		System.out.println(rawPwd + " " + newPwd + " " + newPwdChk);
+
+		// 세션에서 데이터 가져오기
+		MailTokenDto mailToken = (MailTokenDto) session.getAttribute("mailToken");
+		System.out.println(mailToken);
+
+		if (mailToken != null) {
+			// 1. 현재 비밀번호 확인
+
+			// 2. 현재 비밀번호와 변경하는 비밀번호가 동일한지 확인
+
+			// 3.
+
+		}else{
+			// 세션이 만료되었습니다 반환
+		}
+	}
 
 }
 
