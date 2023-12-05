@@ -23,6 +23,9 @@ public class MailTokenDto {
 	private LocalDateTime chgDt;
 	private char pswdChgYn;
 
+	private String rawPwd;
+	private String newPwd;
+
 
 	public static MailTokenDto createEmailId(String username, String pswdChgId) {
 		MailTokenDto emailToken = new MailTokenDto();
@@ -35,7 +38,9 @@ public class MailTokenDto {
 		return emailToken;
 	}
 
+
 	public void setTokenToUsed() {
 		this.pswdChgYn = 'Y';
 	}
+
 }

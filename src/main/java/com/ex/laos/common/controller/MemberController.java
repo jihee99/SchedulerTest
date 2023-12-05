@@ -85,9 +85,9 @@ public class MemberController {
 	 * */
 	@PostMapping("/update/pwd/process2")
 	public Map<String, Object> updatePassword(
-		@RequestParam String username,
-		HttpSession session
-	) throws Exception {
+		@RequestParam String username, HttpSession session
+	){
+
 		Map<String, Object> response = new HashMap<>();
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -97,13 +97,16 @@ public class MemberController {
 		}
 
 		if (userId.equals(username)) {
-			mailService.sendEmailForPasswordReset(username);
+			try{
+				mailService.sendEmailForPasswordReset(username);
 
-			// session.setMaxInactiveInterval(300);
-			// session.setAttribute("auth", authMap);
-
-			response.put("status", "success");
-			response.put("message", "사용자 이름 일치함!!");
+				response.put("status", "success");
+				response.put("message", "메일이 전송되었습니다.");
+			}catch (MessagingException e){
+				response.put("status", "error");
+				response.put("message", "메일 전송에 실패했습니다. 관리자에게 문의해주세요.");
+				// response.put("message", "메일 전송에 실패했습니다. 로그인 정보를 확인해주세요.");
+			}
 
 		} else {
 			response.put("status", "error");

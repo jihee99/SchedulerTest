@@ -24,13 +24,13 @@
                     console.log(response);
                     // alert(response);
                     if (response.status === "success") {
-                        alert("사용자 이름 일치함!!");
+                        alert(response.message);
                     } else {
-                        alert("에러: " + response.message);
+                        alert(response.message);
                     }
                 },
                 error: function (xhr, status, error) {
-                    alert("에러: " + xhr.responseText);
+                    alert(xhr.responseText);
                 }
             });
         }
