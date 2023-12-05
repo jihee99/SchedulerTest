@@ -103,7 +103,7 @@ public class MemberController {
 
 				response.put("status", "success");
 				response.put("message", "메일이 전송되었습니다.");
-			}catch (MessagingException e){
+			} catch (MessagingException e){
 				response.put("status", "error");
 				response.put("message", "메일 전송에 실패했습니다. 관리자에게 문의해주세요.");
 				// response.put("message", "메일 전송에 실패했습니다. 로그인 정보를 확인해주세요.");
@@ -136,25 +136,39 @@ public class MemberController {
 	
 	
 	@PostMapping("/password/update-process")
-	public void updatePassword(
+	public Map<String, Object> updatePassword(
 		@RequestParam String rawPwd, @RequestParam String newPwd, @RequestParam String newPwdChk, HttpSession session
 	){
-		System.out.println(rawPwd + " " + newPwd + " " + newPwdChk);
+		Map<String, Object> response = new HashMap<>();
 
 		// 세션에서 데이터 가져오기
 		MailTokenDto mailToken = (MailTokenDto) session.getAttribute("mailToken");
 		System.out.println(mailToken);
 
 		if (mailToken != null) {
+
 			// 1. 현재 비밀번호 확인
+			if(customUserDetailsService.isPasswordValid(mailToken.getMbrId(), rawPwd)){
 
-			// 2. 현재 비밀번호와 변경하는 비밀번호가 동일한지 확인
+				// 2. 현재 비밀번호와 변경하는 비밀번호가 동일한지 확인
+				if(!rawPwd.equals(newPwd)){
 
-			// 3.
-
+				}else{
+					response.put("status", "error");
+					response.put("message", "새로운 비밀번호가 현재 비밀번호와 일치합니다.");
+				}
+			}else{
+				// 현재 비밀번호가 일치하지 않는 다 반환
+				response.put("status", "error");
+				response.put("message", "현재 비밀번호가 일치하지 않습니다.");
+			}
 		}else{
 			// 세션이 만료되었습니다 반환
+			response.put("status", "error");
+			response.put("message", "세션이 만료되었습니다.");
 		}
+
+		return response;
 	}
 
 }

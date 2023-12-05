@@ -4,42 +4,40 @@
     const headers = {}
     headers[_csrf_header] = _csrf;
 
-    // let canSubmit = true;
 
     document.forms["update"].onsubmit = function(event) {
-
         event.preventDefault();
-
-        // if (!canSubmit) {
-        //     alert("이전 요청 후 3분을 기다려주세요.");
-        //     return false;
-        // }
 
         const rawPwd = document.forms["update"]["rawPwd"].value;
         const newPwd = document.forms["update"]["newPwd"].value;
         const newPwdChk = document.forms["update"]["newPwdChk"].value;
 
         if(newPwd === newPwdChk){
-            $.ajax({
-                type: "POST",
-                url: "/password/update-process",
-                data: { rawPwd: rawPwd, newPwd: newPwd, newPwdChk: newPwdChk },
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader(_csrf_header, _csrf);
-                },
-                success: function (response) {
-                    console.log(response)
-                    // alert(response);
-                    // if (response === "비밀번호가 성공적으로 변경되었습니다.") {
-                    //     // document.forms["update"].submit();
-                    //     // 변경 성공 시 로그인 화면으로 리다이렉트
-                    //     window.location.href = "/login";
-                    // }
-                },
-                error: function (xhr, status, error) {
-                    alert("에러: " + xhr.responseText);
-                }
-            });
+            if(rawPwd !== newPwd){
+                $.ajax({
+                    type: "POST",
+                    url: "/password/update-process",
+                    data: { rawPwd: rawPwd, newPwd: newPwd, newPwdChk: newPwdChk },
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader(_csrf_header, _csrf);
+                    },
+                    success: function (response) {
+                        console.log(response)
+                        // alert(response);
+                        // if (response === "비밀번호가 성공적으로 변경되었습니다.") {
+                        //     // document.forms["update"].submit();
+                        //     // 변경 성공 시 로그인 화면으로 리다이렉트
+                        //     window.location.href = "/login";
+                        // }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("에러: " + xhr.responseText);
+                    }
+                });
+            }else{
+                alert("새로운 비밀번호가 현재 비밀번호와 일치합니다.");
+                return false;
+            }
         }else{
             alert("비밀번호가 일치하지 않습니다.");
             return false;
