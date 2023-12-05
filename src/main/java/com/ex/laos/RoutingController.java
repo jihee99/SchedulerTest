@@ -1,4 +1,4 @@
-package com.ex.laos.common.controller;
+package com.ex.laos;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,5 +32,7 @@ public class RoutingController {
 	@GetMapping("/update/auth")
 	public ModelAndView updateAuth(){ return new ModelAndView("updateAuth"); }
 
+	@GetMapping("/realtime/equipment/inspection/history")
+	public ModelAndView equipmentInspection(){ return new ModelAndView("eqpmntInspectionHstry"); }
 
 }
