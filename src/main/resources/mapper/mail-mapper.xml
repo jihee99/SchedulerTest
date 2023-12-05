@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ex.laos.common.dao.MailDao">
+<!--    <insert id="insertPasswordUpdateHistory" parameterType="string"  useGeneratedKeys="true" keyProperty="string">-->
+    <insert id="insertPasswordUpdateHistory" parameterType="com.ex.laos.common.dto.MailTokenDto">
+        INSERT INTO temp3.tbl_pswd_chg_hstry
+            (pswd_chg_id,
+             mbr_id,
+             reg_dt,
+             pswd_chg_yn,
+             chg_dt,
+             expry_dt)
+        VALUES
+            (#{pswdChgId}::uuid,
+             #{mbrId},
+             #{regDt},
+             #{pswdChgYn},
+             NULL,
+             #{expryDt})
+    </insert>
+
+    <update id="updatePasswordByUsername" parameterType="string">
+
+    </update>
+
+<!--    <resultMap id="pswdChangeResultMap" type="java.util.UUID">-->
+<!--        <id property="pswdChgId" column="pswd_chg_id"/>-->
+<!--    </resultMap>-->
+
+</mapper>

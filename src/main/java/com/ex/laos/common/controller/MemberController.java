@@ -1,14 +1,16 @@
 package com.ex.laos.common.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,17 +22,17 @@ import com.ex.laos.common.dto.MemberDto;
 import com.ex.laos.common.service.CustomUserDetailsService;
 import com.ex.laos.common.service.MailService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 public class MemberController {
 
 	private final CustomUserDetailsService customUserDetailsService;
 
+	private final JavaMailSender javaMailSender;
 	private final MailService mailService;
 
-	public MemberController(CustomUserDetailsService customUserDetailsService, MailService mailService){
-		this.customUserDetailsService = customUserDetailsService;
-		this.mailService = mailService;
-	}
 
 	@PostMapping("/join/member")
 	public void save(@ModelAttribute MemberDto member, HttpServletResponse response) throws IOException {
@@ -39,7 +41,9 @@ public class MemberController {
 	}
 
 
-	// type 1
+	/**
+	 *  화면에서 비밀번호 입력받고 업데이트 하는 메서드
+	 * */
 	@PostMapping("/update/pwd/process")
 	public Map<String, Object> updatePassword(
 		@RequestParam String currentPwd, @RequestParam String newPwd1, @RequestParam String newPwd2
@@ -75,12 +79,15 @@ public class MemberController {
 	}
 
 
-	// type 2
+	/**
+	 *  입력한 이메일로 링크 / form 전송해 비밀번호 변경하는 메서드
+	 *
+	 * */
 	@PostMapping("/update/pwd/process2")
 	public Map<String, Object> updatePassword(
 		@RequestParam String username,
 		HttpSession session
-	) {
+	) throws Exception {
 		Map<String, Object> response = new HashMap<>();
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -90,14 +97,7 @@ public class MemberController {
 		}
 
 		if (userId.equals(username)) {
-			mailService.sendEmailForPasswordReset();
-
-			Map<String, Object> authMap = new HashMap<>();
-			long createTime = System.currentTimeMillis();
-			long endTime = createTime + ( 300 * 1000 );
-
-			authMap.put("createTime", createTime);
-			authMap.put("endTime", endTime);
+			mailService.sendEmailForPasswordReset(username);
 
 			// session.setMaxInactiveInterval(300);
 			// session.setAttribute("auth", authMap);
@@ -112,6 +112,28 @@ public class MemberController {
 
 		return response;
 	}
+
+	// public MimeMessage createMessage(String to)
+	// 	throws UnsupportedEncodingException, MessagingException {
+	// 	MimeMessage message = javaMailSender.createMimeMessage();
+	//
+	// 	message.addRecipients(MimeMessage.RecipientType.TO, to);
+	// 	message.setSubject("sbb 임시 비밀번호");
+	//
+	// 	String msgg = "";
+	// 	msgg += "<div style='margin:100px;'>";
+	// 	msgg +=
+	// 		"<div align='center' style='border:1px solid black; font-family:verdana';>";
+	// 	msgg += "<h3 style='color:blue;'>임시 비밀번호입니다.</h3>";
+	// 	msgg += "<div style='font-size:130%'>";
+	// 	msgg += "CODE : <strong>";
+	// 	msgg += ePw + "</strong><div><br/> ";
+	// 	msgg += "</div>";
+	// 	message.setText(msgg, "utf-8", "html");
+	// 	message.setFrom(new InternetAddress("jea5158@gmail.com", "sbb_Admin"));
+	//
+	// 	return message;
+	// }
 
 }
 
