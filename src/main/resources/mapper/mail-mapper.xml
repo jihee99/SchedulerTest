@@ -3,6 +3,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ex.laos.common.dao.MailDao">
+
+    <update id="updateDisablePasswordChangeRequest" parameterType="com.ex.laos.common.dto.MailTokenDto">
+        UPDATE
+            temp3.tbl_pswd_chg_hstry
+        SET
+            pswd_chg_yn = 'Y',
+            chg_dt= now()
+        WHERE
+            mbr_id=#{mbrId} and
+            pswd_chg_id != #{pswdChgId} ::uuid
+    </update>
+
 <!--    <insert id="insertPasswordUpdateHistory" parameterType="string"  useGeneratedKeys="true" keyProperty="string">-->
     <insert id="insertPasswordUpdateHistory" parameterType="com.ex.laos.common.dto.MailTokenDto">
         INSERT INTO temp3.tbl_pswd_chg_hstry
@@ -20,6 +32,25 @@
              NULL,
              #{expryDt})
     </insert>
+
+
+    <select id="selectTokenByPswdChgId" parameterType="string" resultType="com.ex.laos.common.dto.MailTokenDto">
+        SELECT
+            tpch.pswd_chg_id,
+            tpch.mbr_id,
+            tpch.reg_dt,
+            tpch.pswd_chg_yn,
+            tpch.chg_dt,
+            tpch.expry_dt,
+            tm.pswd
+        FROM
+            temp3.tbl_pswd_chg_hstry tpch
+        JOIN temp3.tbl_mbr tm on tpch.mbr_id = tm.mbr_id
+        WHERE
+            tpch.pswd_chg_id = #{token} ::uuid AND
+            tpch.pswd_chg_yn = 'N'
+    </select>
+
 
     <update id="updatePasswordByUsername" parameterType="string">
 

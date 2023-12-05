@@ -37,6 +37,8 @@ public class MailServiceImpl implements MailService {
 		System.out.println("EmailToken >> " + mailTokenDto);
 
 		// 1. 비밀번호 변경 이력 테이블에 insert
+		// ( 이전 이력 비활성화 처리 - pswd_chg_yn > Y로 변경
+		mailDao.updateDisablePasswordChangeRequest(mailTokenDto);
 		mailDao.insertPasswordUpdateHistory(mailTokenDto);
 
 		// 2. 이메일 전송
@@ -67,6 +69,11 @@ public class MailServiceImpl implements MailService {
 		// String updatePwd = passwordEncoder.encode(rawPassword);
 		// System.out.println(updatePwd);
 		// mailDao.updatePasswordByUsername(username, updatePwd);
+	}
+
+	@Override
+	public MailTokenDto isTokenValid(String token) {
+		return mailDao.selectTokenByPswdChgId(token);
 	}
 
 	private String setEmailHtmlWithButton(String link) {
