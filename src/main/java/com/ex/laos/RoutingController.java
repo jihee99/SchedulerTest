@@ -15,24 +15,26 @@ public class RoutingController {
 
 	@GetMapping("/login")
 	public ModelAndView loginPage(){
-		return new ModelAndView("login");
+		return new ModelAndView("mngmt/login");
 	}
 
 	@GetMapping("/join")
 	public ModelAndView joinUsPage(){
-		return new ModelAndView("join");
+		return new ModelAndView("mngmt/join");
 	}
 
 	@GetMapping("/home")
 	public ModelAndView home() { return new ModelAndView("home"); }
 
 	@GetMapping("/update/pwd")
-	public ModelAndView updatePassword(){ return new ModelAndView("updatePwd"); }
+	public ModelAndView updatePassword(){ return new ModelAndView("mngmt/updatePwd"); }
 
 	@GetMapping("/update/auth")
-	public ModelAndView updateAuth(){ return new ModelAndView("updateAuth"); }
+	public ModelAndView updateAuth(){ return new ModelAndView("mngmt/updateAuth"); }
 
 	@GetMapping("/realtime/equipment/inspection/history")
-	public ModelAndView equipmentInspection(){ return new ModelAndView("eqpmntInspectionHstry"); }
+	public ModelAndView equipmentInspectionHistory(){ return new ModelAndView("eqpmnt/eqpmnt-Inspection-hstry"); }
 
+	@GetMapping("/realtime/equipment/inspection/item")
+	public ModelAndView equipmentInspectionItem(){ return new ModelAndView("eqpmnt/eqpmnt-Inspection-itm"); }
 }
