@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ex.laos.eqpmnt.dao.EqpmntDao">
+
+    <select id="selectEqpmntInspectionHistoryList" resultType="list">
+        WITH CTE AS (
+            SELECT
+                A.CHCK_FLFMT_HSTRY_ID,
+                A.OBSVTR_ID,
+                A.CHCK_FLFMT_DAY,
+                A.CHCK_FLFR_ID,
+                B.CHCK_ARTCL_ID,
+                B.CHCK_RSLT,
+                B.RMRK,
+                COALESCE(RF.RF_OBSVTR_CD, WL.WL_OBSVTR_CD, FM.OBSVTR_CD) AS OBSVTR_CD,
+                COALESCE(RF.RF_OBSVTR_NM, WL.WL_OBSVTR_NM, FM.OBSVTR_NM) AS OBSVTR_NM
+            FROM
+                TEMP3.TBL_OBSVTR_EQPMNT_CHCK_FLFMT_HSTRY A
+            LEFT JOIN
+                TEMP3.TBL_OBSVTR_EQPMNT_CHCK_RSLT B ON B.CHCK_FLFMT_HSTRY_ID = A.CHCK_FLFMT_HSTRY_ID
+            LEFT JOIN
+                TEMP3.TBL_RF_OBSVTR RF ON RF.RF_OBSVTR_ID = A.OBSVTR_ID
+            LEFT JOIN
+                TEMP3.TBL_WL_OBSVTR WL ON WL.WL_OBSVTR_ID = A.OBSVTR_ID
+            LEFT JOIN
+                TEMP3.TBL_FM_OBSVTR FM ON FM.FM_OBSVTR_ID = A.OBSVTR_ID
+            )
+        SELECT
+            CT.*,
+            D.CHCK_ARTCL_NM AS CHCK_ARTCL_NM,
+            D.CHCK_ARTCL_ID AS CHCK_ARTCL_ID,
+            D.CHCK_ARTCL_GUIDE AS CHCK_ARTCL_GUIDE,
+            D.OBSVTR_TYPE AS OBSVTR_TYPE,
+            D.REG_DT AS REG_DT,
+            D.RGTR_ID AS RGTR_ID,
+            D.MDFCN_DT AS MDFCN_DT,
+            D.MDFR_ID AS MDFR_ID
+        FROM
+            CTE CT,
+            TEMP3.TBL_OBSVTR_EQPMNT_CHCK_ARTCL D
+        WHERE
+            D.USE_YN = 'Y'
+        ORDER BY
+            CT.CHCK_FLFMT_DAY
+    </select>
+
+    <select id="selectEqpmntInspectionHistorySearchList" parameterType="map" resultType="map">
+        WITH CTE AS (
+            SELECT
+                A.CHCK_FLFMT_HSTRY_ID,
+                A.OBSVTR_ID,
+                A.CHCK_FLFMT_DAY,
+                A.CHCK_FLFR_ID,
+                B.CHCK_ARTCL_ID,
+                B.CHCK_RSLT,
+                B.RMRK,
+                COALESCE(RF.RF_OBSVTR_CD, WL.WL_OBSVTR_CD, FM.OBSVTR_CD) AS OBSVTR_CD,
+                COALESCE(RF.RF_OBSVTR_NM, WL.WL_OBSVTR_NM, FM.OBSVTR_NM) AS OBSVTR_NM
+            FROM
+                TEMP3.TBL_OBSVTR_EQPMNT_CHCK_FLFMT_HSTRY A
+            LEFT JOIN
+                TEMP3.TBL_OBSVTR_EQPMNT_CHCK_RSLT B ON B.CHCK_FLFMT_HSTRY_ID = A.CHCK_FLFMT_HSTRY_ID
+            LEFT JOIN
+                TEMP3.TBL_RF_OBSVTR RF ON RF.RF_OBSVTR_ID = A.OBSVTR_ID
+            LEFT JOIN
+                TEMP3.TBL_WL_OBSVTR WL ON WL.WL_OBSVTR_ID = A.OBSVTR_ID
+            LEFT JOIN
+                TEMP3.TBL_FM_OBSVTR FM ON FM.FM_OBSVTR_ID = A.OBSVTR_ID
+            )
+        SELECT
+            CT.*,
+            D.CHCK_ARTCL_NM AS CHCK_ARTCL_NM,
+            D.CHCK_ARTCL_ID AS CHCK_ARTCL_ID,
+            D.CHCK_ARTCL_GUIDE AS CHCK_ARTCL_GUIDE,
+            D.OBSVTR_TYPE AS OBSVTR_TYPE,
+            D.REG_DT AS REG_DT,
+            D.RGTR_ID AS RGTR_ID,
+            D.MDFCN_DT AS MDFCN_DT,
+            D.MDFR_ID AS MDFR_ID
+        FROM
+            CTE CT,
+            TEMP3.TBL_OBSVTR_EQPMNT_CHCK_ARTCL D
+        WHERE
+            D.OBSVTR_TYPE  = #{type} AND
+            <if test="(startDate != null and !startDate.equals('')) and (endDate != null and !endDate.equals(''))">
+                CT.CHCK_FLFMT_DAY <![CDATA[ > ]]> TO_TIMESTAMP(#{startDate},'MM/DD/YYYY') AND
+                CT.CHCK_FLFMT_DAY <![CDATA[ <= ]]> TO_TIMESTAMP(#{endDate},'MM/DD/YYYY') AND
+            </if>
+            D.USE_YN = 'Y'
+        ORDER BY
+            CT.CHCK_FLFMT_DAY
+<!--        SELECT-->
+<!--            CT.*,-->
+<!--            D.CHCK_ARTCL_NM AS CHCK_ARTCL_NM,-->
+<!--            D.CHCK_ARTCL_ID AS CHCK_ARTCL_ID,-->
+<!--            D.CHCK_ARTCL_GUIDE AS CHCK_ARTCL_GUIDE,-->
+<!--            D.OBSVTR_TYPE AS OBSVTR_TYPE,-->
+<!--            D.REG_DT AS REG_DT,-->
+<!--            D.RGTR_ID AS RGTR_ID,-->
+<!--            D.MDFCN_DT AS MDFCN_DT,-->
+<!--            D.MDFR_ID AS MDFR_ID-->
+<!--        FROM-->
+<!--            (-->
+<!--                SELECT-->
+<!--                    A.CHCK_FLFMT_HSTRY_ID,-->
+<!--                    A.OBSVTR_ID,-->
+<!--                    A.CHCK_FLFMT_DAY,-->
+<!--                    A.CHCK_FLFR_ID,-->
+<!--                    B.CHCK_ARTCL_ID,-->
+<!--                    B.CHCK_RSLT,-->
+<!--                    B.RMRK-->
+<!--                FROM-->
+<!--                    TEMP3.TBL_OBSVTR_EQPMNT_CHCK_FLFMT_HSTRY A-->
+<!--                LEFT JOIN-->
+<!--                    TEMP3.TBL_OBSVTR_EQPMNT_CHCK_RSLT B ON B.CHCK_FLFMT_HSTRY_ID = A.CHCK_FLFMT_HSTRY_ID-->
+<!--            ) CT ,-->
+<!--            TEMP3.TBL_OBSVTR_EQPMNT_CHCK_ARTCL D-->
+<!--        WHERE-->
+<!--            D.OBSVTR_TYPE  = #{type} AND-->
+<!--            <if test="(startDate != null and !startDate.equals('')) and (endDate != null and !endDate.equals(''))">-->
+<!--                CT.CHCK_FLFMT_DAY <![CDATA[ > ]]> TO_TIMESTAMP(#{startDate},'MM/DD/YYYY') AND-->
+<!--                CT.CHCK_FLFMT_DAY <![CDATA[ <= ]]> TO_TIMESTAMP(#{endDate},'MM/DD/YYYY') AND-->
+<!--            </if>-->
+<!--            D.USE_YN = 'Y'-->
+<!--        ORDER BY CT.CHCK_FLFMT_DAY-->
+    </select>
+
+</mapper>

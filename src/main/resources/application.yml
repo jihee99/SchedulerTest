@@ -31,9 +31,15 @@ spring:
 server:
   port: 9900
 
+#logging:
+#  level:
+#    root: info
+
 logging:
   level:
     root: info
+#    org.springframework.security: DEBUG
+
 #    com.ex.laos.common.dao.MemberDao: TRACE
 
 mybatis:

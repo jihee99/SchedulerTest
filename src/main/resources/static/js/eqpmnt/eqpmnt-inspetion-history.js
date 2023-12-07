@@ -42,9 +42,9 @@
             url: "/realtime/eqpmnt/get/hstry/search",
             data: formData,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            // beforeSend: function(xhr) {
-            //     xhr.setRequestHeader(_csrf_header, _csrf);
-            // },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(_csrf_header, _csrf);
+            },
             success: function (response) {
                 console.log(response);
             },

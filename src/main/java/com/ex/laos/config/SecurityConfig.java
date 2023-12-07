@@ -49,8 +49,10 @@ public class SecurityConfig {
 			// .headers().frameOptions().sameOrigin().and()
 			.authorizeRequests(authorizeRequests ->
 				authorizeRequests
-					.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join/member", "/password/**").permitAll() // 특정 경로는 인증 없이 접근 허용
-					.anyRequest().authenticated() // 그 외의 요청은 인증 필요
+					.antMatchers("/realtime/eqpmnt/get/hstry/search").permitAll() // 특정 URL에 대한 권한 부여
+					.antMatchers("/realtime/**").permitAll()
+					.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join/member", "/password/**").permitAll()
+					.anyRequest().authenticated()
 			)
 				// 로그인 설정
 			.formLogin(formLogin ->

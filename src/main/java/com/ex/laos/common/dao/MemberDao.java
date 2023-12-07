@@ -1,7 +1,6 @@
 package com.ex.laos.common.dao;
 
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.ibatis.annotations.Mapper;
 
