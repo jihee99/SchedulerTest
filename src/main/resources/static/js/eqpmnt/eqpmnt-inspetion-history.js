@@ -46,7 +46,11 @@
                 xhr.setRequestHeader(_csrf_header, _csrf);
             },
             success: function (response) {
-                console.log(response);
+                if(response.status == "success"){
+                    console.log(response.list);x
+                }else{
+                    alert(response.message);
+                }
             },
             error: function (xhr, status, error) {
 

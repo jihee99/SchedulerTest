@@ -4,13 +4,14 @@
 
 <mapper namespace="com.ex.laos.eqpmnt.dao.EqpmntDao">
 
-    <select id="selectEqpmntInspectionHistoryList" resultType="list">
+    <select id="selectEqpmntInspectionHistoryList" resultType="map">
         WITH CTE AS (
             SELECT
                 A.CHCK_FLFMT_HSTRY_ID,
                 A.OBSVTR_ID,
                 A.CHCK_FLFMT_DAY,
                 A.CHCK_FLFR_ID,
+                M.NM AS CHCK_FLFR_NM,
                 B.CHCK_ARTCL_ID,
                 B.CHCK_RSLT,
                 B.RMRK,
@@ -18,8 +19,8 @@
                 COALESCE(RF.RF_OBSVTR_NM, WL.WL_OBSVTR_NM, FM.OBSVTR_NM) AS OBSVTR_NM
             FROM
                 TEMP3.TBL_OBSVTR_EQPMNT_CHCK_FLFMT_HSTRY A
-            LEFT JOIN
-                TEMP3.TBL_OBSVTR_EQPMNT_CHCK_RSLT B ON B.CHCK_FLFMT_HSTRY_ID = A.CHCK_FLFMT_HSTRY_ID
+            JOIN TEMP3.TBL_OBSVTR_EQPMNT_CHCK_RSLT B ON B.CHCK_FLFMT_HSTRY_ID = A.CHCK_FLFMT_HSTRY_ID
+            JOIN TEMP3.TBL_MBR M ON M.MBR_ID = A.CHCK_FLFR_ID
             LEFT JOIN
                 TEMP3.TBL_RF_OBSVTR RF ON RF.RF_OBSVTR_ID = A.OBSVTR_ID
             LEFT JOIN
@@ -43,7 +44,7 @@
         WHERE
             D.USE_YN = 'Y'
         ORDER BY
-            CT.CHCK_FLFMT_DAY
+            CT.CHCK_FLFMT_DAY DESC
     </select>
 
     <select id="selectEqpmntInspectionHistorySearchList" parameterType="map" resultType="map">
@@ -53,6 +54,7 @@
                 A.OBSVTR_ID,
                 A.CHCK_FLFMT_DAY,
                 A.CHCK_FLFR_ID,
+                M.NM AS CHCK_FLFR_NM,
                 B.CHCK_ARTCL_ID,
                 B.CHCK_RSLT,
                 B.RMRK,
@@ -60,8 +62,8 @@
                 COALESCE(RF.RF_OBSVTR_NM, WL.WL_OBSVTR_NM, FM.OBSVTR_NM) AS OBSVTR_NM
             FROM
                 TEMP3.TBL_OBSVTR_EQPMNT_CHCK_FLFMT_HSTRY A
-            LEFT JOIN
-                TEMP3.TBL_OBSVTR_EQPMNT_CHCK_RSLT B ON B.CHCK_FLFMT_HSTRY_ID = A.CHCK_FLFMT_HSTRY_ID
+            JOIN TEMP3.TBL_OBSVTR_EQPMNT_CHCK_RSLT B ON B.CHCK_FLFMT_HSTRY_ID = A.CHCK_FLFMT_HSTRY_ID
+            JOIN TEMP3.TBL_MBR M ON M.MBR_ID = A.CHCK_FLFR_ID
             LEFT JOIN
                 TEMP3.TBL_RF_OBSVTR RF ON RF.RF_OBSVTR_ID = A.OBSVTR_ID
             LEFT JOIN
@@ -90,7 +92,7 @@
             </if>
             D.USE_YN = 'Y'
         ORDER BY
-            CT.CHCK_FLFMT_DAY
+            CT.CHCK_FLFMT_DAY DESC
 <!--        SELECT-->
 <!--            CT.*,-->
 <!--            D.CHCK_ARTCL_NM AS CHCK_ARTCL_NM,-->

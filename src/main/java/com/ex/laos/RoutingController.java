@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ex.laos.eqpmnt.service.EqpmntService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequiredArgsConstructor
 public class RoutingController {
+
+	private final EqpmntService eqpmntService;
 
 	@GetMapping("/login")
 	public ModelAndView loginPage(){
@@ -35,9 +39,9 @@ public class RoutingController {
 
 	@GetMapping("/realtime/equipment/inspection/history")
 	public ModelAndView equipmentInspectionHistory(){
-		// ModelAndView modelAndView = new ModelAndView("eqpmnt/eqpmnt-Inspection-hstry");
-		// modelAndView.addObject("list", );
-		return new ModelAndView("eqpmnt/eqpmnt-Inspection-hstry");
+		ModelAndView modelAndView = new ModelAndView("eqpmnt/eqpmnt-Inspection-hstry");
+		modelAndView.addObject("list", eqpmntService.selectEqpmntInspectionHistoryList());
+		return modelAndView;
 	}
 
 	@GetMapping("/realtime/equipment/inspection/item")

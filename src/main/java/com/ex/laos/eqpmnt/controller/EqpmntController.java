@@ -51,14 +51,13 @@ public class EqpmntController {
 
 		List<Map<String, String>> list = eqpmntService.selectEqpmntInspectionHistorySearchList(type, station, period);
 
-		System.out.println(list);
-		// if(!list.isEmpty()){
-		// 	response.put("status", "success");
-		// 	response.put("list", list);
-		// }else{
-		// 	response.put("status", "error");
-		// 	response.put("message", "점검 이력 조회에 실패했습니다.");
-		// }
+		if(!list.isEmpty()){
+			response.put("status", "success");
+			response.put("list", list);
+		}else{
+			response.put("status", "error");
+			response.put("message", "점검 이력 조회에 실패했습니다.");
+		}
 		return response;
 	}
 
