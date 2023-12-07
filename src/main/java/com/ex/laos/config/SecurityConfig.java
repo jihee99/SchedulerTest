@@ -45,11 +45,11 @@ public class SecurityConfig {
 				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Use a cookie to store the CSRF token
 				.and()
 			.cors().disable() // CORS 보안 설정 비활성화
-				// .cors().and()
-				// .headers().frameOptions().sameOrigin().and()
+			// .cors().and()
+			// .headers().frameOptions().sameOrigin().and()
 			.authorizeRequests(authorizeRequests ->
 				authorizeRequests
-					.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join/member", "/password/**", "/realtime/**").permitAll() // 특정 경로는 인증 없이 접근 허용
+					.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join/member", "/password/**").permitAll() // 특정 경로는 인증 없이 접근 허용
 					.anyRequest().authenticated() // 그 외의 요청은 인증 필요
 			)
 				// 로그인 설정
@@ -72,6 +72,13 @@ public class SecurityConfig {
 				logout
 					.logoutSuccessUrl("/login") // 로그아웃 후 리다이렉트할 URL
 			);
+
+			http.rememberMe() // rememberMe 기능 작동함
+				.rememberMeParameter("rememberMe") // default: remember-me, checkbox 등의 이름과 맞춰야함
+				.tokenValiditySeconds(3600) // 쿠키의 만료시간 설정(초), default: 14일
+				.alwaysRemember(false) // 사용자가 체크박스를 활성화하지 않아도 항상 실행, default: false
+				.userDetailsService(userDetailsService); // 기능을 사용할 때 사용자 정보가 필요함. 반드시 이 설정 필요함.
+
 
 		// 커스텀 필터 추가
 		// http.addFilterAfter(new CustomHeaderFilter(), SecurityContextPersistenceFilter.class);

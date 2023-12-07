@@ -1,6 +1,7 @@
 package com.ex.laos;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,7 +34,11 @@ public class RoutingController {
 	public ModelAndView updateAuth(){ return new ModelAndView("mngmt/updateAuth"); }
 
 	@GetMapping("/realtime/equipment/inspection/history")
-	public ModelAndView equipmentInspectionHistory(){ return new ModelAndView("eqpmnt/eqpmnt-Inspection-hstry"); }
+	public ModelAndView equipmentInspectionHistory(){
+		// ModelAndView modelAndView = new ModelAndView("eqpmnt/eqpmnt-Inspection-hstry");
+		// modelAndView.addObject("list", );
+		return new ModelAndView("eqpmnt/eqpmnt-Inspection-hstry");
+	}
 
 	@GetMapping("/realtime/equipment/inspection/item")
 	public ModelAndView equipmentInspectionItem(){ return new ModelAndView("eqpmnt/eqpmnt-Inspection-itm"); }

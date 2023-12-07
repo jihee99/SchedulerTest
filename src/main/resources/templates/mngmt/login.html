@@ -11,6 +11,7 @@
                 <h5 class="font-weight-bolder mt-5 mb-4">로그인</h5>
                 <input type="text" placeholder="아이디" name="username" id="username"/>
                 <input type="password" placeholder="비밀번호" name="password" id="password"/>
+                <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" />
                 <div align="center" th:if="${param.error}">
                     <p class="font-12 text-danger">아이디 혹은 비밀번호가 일치하지 않습니다.</p>
                 </div>
