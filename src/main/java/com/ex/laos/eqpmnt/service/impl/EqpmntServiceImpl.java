@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ex.laos.eqpmnt.dao.EqpmntDao;
 import com.ex.laos.eqpmnt.service.EqpmntService;
@@ -24,6 +25,30 @@ public class EqpmntServiceImpl implements EqpmntService {
 	@Override
 	public List<Map<String, String>> selectEqpmntInspectionHistoryList() {
 		return eqpmntDao.selectEqpmntInspectionHistoryList();
+	}
+
+	@Override
+	public List<Map<String, String>> selectEqpmntInspectionHistoryDetailList() {
+		return eqpmntDao.selectEqpmntInspectionHistoryDetailList();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Map<String, Object> selectEqpmntInspectionDetailsByHstryId(String hstryCode) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, String>> listResult = eqpmntDao.selectEqpmntInspectionDetailsByHstryId(hstryCode);
+			if (!listResult.isEmpty()) {
+				response.put("list", listResult);
+				response.put("summary", eqpmntDao.selectEqpmntInspectionSummaryByHstryId(hstryCode));
+			}else{
+				response.put("error", "Transaction error occurred");
+			}
+		} catch (Exception e) {
+			response.put("error", "Transaction error occurred");
+			log.error("Error in selectEqpmntInspectionDetailsByHstryId: ", e);
+		}
+		return response;
 	}
 
 	@Override
