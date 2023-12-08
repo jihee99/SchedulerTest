@@ -179,4 +179,36 @@
 <!--            CT.CHCK_FLFMT_DAY DESC-->
     </select>
 
+
+    <select id="selectEqpmntInspectionItemList" resultType="map">
+        SELECT
+            A.CHCK_ARTCL_ID,
+            A.CHCK_ARTCL_NM,
+            A.CHCK_ARTCL_GUIDE,
+            A.OBSVTR_TYPE,
+            TO_CHAR(A.REG_DT, 'YYYY-MM-DD HH24:MI') AS REG_DT,
+            CASE WHEN A.RGTR_ID != 'SYSTEM' THEN M.NM ELSE A.RGTR_ID END AS RGTR_NM
+        FROM
+            TEMP3.TBL_OBSVTR_EQPMNT_CHCK_ARTCL A
+                left JOIN TEMP3.TBL_MBR M ON M.MBR_ID = A.RGTR_ID
+        WHERE
+            USE_YN = 'Y'
+        ORDER BY REG_DT DESC
+    </select>
+
+    <insert id="insertEqpmntInspectionArtcl" parameterType="com.ex.laos.eqpmnt.dto.EqpmntInspectionDto">
+        INSERT INTO temp3.tbl_obsvtr_eqpmnt_chck_artcl (
+            chck_artcl_nm,
+            chck_artcl_guide,
+            obsvtr_type,
+            rgtr_id
+        )
+        VALUES
+        (
+           #{name},
+           #{guide},
+           #{type},
+           COALESCE(#{rgtrId}, 'SYSTEM'::character varying)
+       )
+    </insert>
 </mapper>

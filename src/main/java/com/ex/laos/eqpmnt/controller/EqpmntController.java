@@ -1,17 +1,20 @@
 package com.ex.laos.eqpmnt.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ex.laos.dam.service.APIService;
+import com.ex.laos.eqpmnt.dto.EqpmntInspectionDto;
 import com.ex.laos.eqpmnt.service.EqpmntService;
 
 import lombok.RequiredArgsConstructor;
@@ -83,4 +86,19 @@ public class EqpmntController {
 		return response;
 	}
 
+	@PostMapping("/items/register")
+	public Map<String, String> insertEqpmntInspectionArtcl(
+		@ModelAttribute EqpmntInspectionDto dto
+	){
+		Map<String, String> response = new HashMap<>();
+		try{
+			eqpmntService.insertEqpmntInspectionArtcl(dto);
+			response.put("status", "success");
+			response.put("message", "등록이 완료되었습니다.");
+		}catch (Exception e) {
+			response.put("status", "error");
+			response.put("message", "등록에 실패했습니다. 관리자에게 문의해주세요.");
+		}
+		return response;
+	}
 }

@@ -7,10 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ex.laos.eqpmnt.dao.EqpmntDao;
+import com.ex.laos.eqpmnt.dto.EqpmntInspectionDto;
 import com.ex.laos.eqpmnt.service.EqpmntService;
 
 import lombok.RequiredArgsConstructor;
@@ -55,9 +58,9 @@ public class EqpmntServiceImpl implements EqpmntService {
 	public List<Map<String, String>> selectEqpmntInspectionHistorySearchList(String type, String station, String period) {
 
 		Map<String, String> map = new HashMap<>();
-
 		map.put("type", type);
 		map.put("station", station);
+
 		if(!period.isEmpty()){
 			String[] dates = period.split("-");
 			map.put("startDate", dates[0].trim());
@@ -67,5 +70,21 @@ public class EqpmntServiceImpl implements EqpmntService {
 			map.put("endDate", "");
 		}
 		return eqpmntDao.selectEqpmntInspectionHistorySearchList(map);
+	}
+
+	@Override
+	public List<Map<String, String>> selectEqpmntInspectionItemList() {
+		return eqpmntDao.selectEqpmntInspectionItemList();
+	}
+
+	@Override
+	public void insertEqpmntInspectionArtcl(EqpmntInspectionDto dto) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		String loggedInUserId = authentication.getName();
+		if(!loggedInUserId.equals("anonymousUser")){
+			dto.setRgtrId(loggedInUserId);
+		}
+		eqpmntDao.insertEqpmntInspectionArtcl(dto);
 	}
 }

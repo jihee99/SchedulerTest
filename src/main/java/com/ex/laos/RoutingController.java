@@ -45,5 +45,9 @@ public class RoutingController {
 	}
 
 	@GetMapping("/realtime/equipment/inspection/item")
-	public ModelAndView equipmentInspectionItem(){ return new ModelAndView("eqpmnt/eqpmnt-Inspection-itm"); }
+	public ModelAndView equipmentInspectionItem(){
+		ModelAndView modelAndView = new ModelAndView("eqpmnt/eqpmnt-Inspection-itm");
+		modelAndView.addObject("list", eqpmntService.selectEqpmntInspectionItemList());
+		return modelAndView;
+	}
 }

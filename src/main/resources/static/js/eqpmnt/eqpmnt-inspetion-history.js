@@ -64,13 +64,9 @@
                 }
             },
             error: function (xhr, status, error) {
-
+                console.log(error);
             }
         });
-        // .done(function(response){
-        //     console.log(response);
-        //     $('#tableFragment').append(response);
-        // });
     });
 
 
@@ -120,7 +116,6 @@
                     $(".modal-body").append(html);
                     $('#details').modal('show');
                 }else{
-
                     alert(response.message);
                     $('#details').modal('hide');
                 }
