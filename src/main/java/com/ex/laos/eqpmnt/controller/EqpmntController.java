@@ -41,6 +41,26 @@ public class EqpmntController {
 		return response;
 	}
 
+	@PostMapping("/get/hstry/details")
+	public Map<String, Object> selectEqpmntInspectionDetailsByHstryId(
+		@RequestParam("hstryCode") String hstryCode
+	){
+		Map<String, Object> response = new HashMap<>();
+
+
+		Map<String, Object> data = eqpmntService.selectEqpmntInspectionDetailsByHstryId(hstryCode);
+
+		if (!data.containsKey("error")) {
+			response.put("status", "success");
+			response.put("data", data);
+		}else{
+			response.put("status", "error");
+			response.put("message", "점검 상세 항목 조회에 실패했습니다.");
+		}
+		return response;
+	}
+
+
 	@PostMapping("/get/hstry/search")
 	public Map<String, Object> selectEqpmntInspectionHistorySearchList(
 		@RequestParam("type") String type,

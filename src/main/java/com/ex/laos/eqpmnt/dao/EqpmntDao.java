@@ -9,5 +9,11 @@ import org.apache.ibatis.annotations.Mapper;
 public interface EqpmntDao {
 	List<Map<String, String>> selectEqpmntInspectionHistoryList();
 
+	List<Map<String, String>> selectEqpmntInspectionDetailsByHstryId(String hstryCode);
+
+	Map<String, String> selectEqpmntInspectionSummaryByHstryId(String hstryCode);
+
+	List<Map<String, String>> selectEqpmntInspectionHistoryDetailList();
+
 	List<Map<String, String>> selectEqpmntInspectionHistorySearchList(Map<String, String> map);
 }
