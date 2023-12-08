@@ -33,12 +33,9 @@
 
     $('#btnSearch').on('click',function(){
 
-        // let formData =  new FormData($('#search')[0]);
         let formData = $("#search").serialize();
-        console.log(formData)
-
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "/realtime/eqpmnt/get/hstry/search",
             data: formData,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -47,22 +44,37 @@
             },
             success: function (response) {
                 if(response.status == "success"){
-                    console.log(response.list);
+                    console.log(response);
+                    // $('#tableFragment').load('/eqpmnt/eqpmnt-inspection-hstry.html #table');
+                    let tbody = $('#tableFragment > div > table > tbody');
+                    tbody.empty(); // 기존 데이터 제거
+                    let row = '';
+                    response.list.forEach(function (data, index) {
+                        row += `<tr>`
+                            +`<td>${index + 1}</td>`
+                            +`<td>${data.obsvtr_nm}</td>`
+                            +`<td>${data.chck_flfmt_day}</td>`
+                            +`<td>${data.chck_flfr_nm}</td>`
+                            +`<td><i class="bi bi-list icon" data-hstry="${data.chck_flfmt_hstry_id}"></i></td>`
+                            +`</tr>`;
+                    });
+                    tbody.append(row);
                 }else{
                     alert(response.message);
                 }
             },
             error: function (xhr, status, error) {
 
-            },
-            default: function(){
-
             }
         });
+        // .done(function(response){
+        //     console.log(response);
+        //     $('#tableFragment').append(response);
+        // });
     });
 
 
-    $('.icon').on('click',function(e){
+    $(document).on('click', '.icon', function(e) {
         let hstryCode = e.target.dataset.hstry
 
         $.ajax({
@@ -114,10 +126,7 @@
                 }
             },
             error: function (xhr, status, error) {
-
-            },
-            default: function(){
-
+                console.log(error)
             }
         });
     });

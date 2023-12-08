@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,22 +56,21 @@ public class EqpmntController {
 			response.put("data", data);
 		}else{
 			response.put("status", "error");
-			response.put("message", "점검 상세 항목 조회에 실패했습니다.");
+			response.put("message", "점검 결과가 존재하지 않습니다.");
 		}
 		return response;
 	}
 
-
-	@PostMapping("/get/hstry/search")
+	@GetMapping("/get/hstry/search")
 	public Map<String, Object> selectEqpmntInspectionHistorySearchList(
 		@RequestParam("type") String type,
 		@RequestParam("station") String station,
 		@RequestParam("datefilter") String period
+		// , Model model
 	){
 		Map<String, Object> response = new HashMap<>();
 
 		List<Map<String, String>> list = eqpmntService.selectEqpmntInspectionHistorySearchList(type, station, period);
-
 		if(!list.isEmpty()){
 			response.put("status", "success");
 			response.put("list", list);
@@ -78,6 +78,8 @@ public class EqpmntController {
 			response.put("status", "error");
 			response.put("message", "점검 이력 조회에 실패했습니다.");
 		}
+		// model.addAttribute("list",  eqpmntService.selectEqpmntInspectionHistorySearchList(type, station, period));
+		// return "eqpmnt/eqpmnt-Inspection-hstry :: #tableFragment";
 		return response;
 	}
 

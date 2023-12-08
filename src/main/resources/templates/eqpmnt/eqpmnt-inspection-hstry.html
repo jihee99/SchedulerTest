@@ -25,9 +25,9 @@
             <h4>Equipment inspection history</h4>
         </div>
         <div class="search_wrap">
-            <div class="mt-5 border p-3" style="width: 48rem;">
-                <form id="search" class="form-inline">
-                    <div>
+            <div th:fragment="searchForm" class="mt-5 border p-3" style="width: 48rem;">
+                <div class="search_wrap">
+                    <form id="search" class="form-inline">
                         <div class="row row-cols-auto">
                             <div class="col-1 d-inline-flex pt-1">
                                 <label class="form-label fw-bolder" for="eqpmntType">Type</label>
@@ -59,15 +59,17 @@
                                 <input id="period" class="form-control" type="text" name="datefilter" value="">
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-2">
-                        <input id="btnSearch" class="btn btn-primary" type="button" value="submit">
-                    </div>
-                </form>
+
+                        <div class="mt-2">
+                            <input id="btnSearch" class="btn btn-primary" type="button" value="submit">
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="table-wrap mt-5">
-                <table class="table">
-                    <thead>
+            <div th:fragment="tableFragment" id="tableFragment">
+                <div class="table-wrap mt-5">
+                    <table class="table">
+                        <thead>
                         <tr>
                             <th scope="col">No.</th>
                             <th scope="col">Station</th>
@@ -75,18 +77,19 @@
                             <th scope="col">Inspector</th>
                             <th scope="col">View inspection details</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <tr th:each="data, i: ${list}">
-                            <td th:text="${i.index}"></td>
+                            <td th:text="${i.index + 1}"></td>
                             <td th:text="${data.obsvtr_nm}"></td>
                             <td th:text="${data.chck_flfmt_day}"></td>
                             <td th:text="${data.chck_flfr_nm}"></td>
                             <td th:value="${data.chck_flfmt_hstry_id}"><i class="bi bi-list icon" th:data-hstry="${data.chck_flfmt_hstry_id}"></i></td>
 <!--                            <td th:value="${data.chck_flfmt_hstry_id}"><i class="bi bi-list icon" data-bs-toggle="modal" data-bs-target="#details" th:data-hstry="${data.chck_flfmt_hstry_id}"></i></td>-->
                         </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -100,42 +103,7 @@
                     <h5 class="modal-title" id="staticBackdropLabel">Equipment inspection history</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-<!--                    <div class="content">-->
-                        <div class="summary">
-                            <div class="row">
-                                <div class="col fw-bolder">Inspector</div>
-                                <div class="col-sm-3">Mr.Lao</div>
-                                <div class="col fw-bolder">Date</div>
-                                <div class="col-sm-5">2023-12-08 08:52</div>
-                            </div>
-                            <hr>
-                        </div>
-                        <div class="head py-2 px-2">
-                            <div class="mt-2 row">
-                                <div class="col">
-                                    <p class="fs-5">Case</p>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="Normal">
-                                        <label class="form-check-label" for="Normal">Normal</label>
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="Abnormal" checked>
-                                        <label class="form-check-label" for="Abnormal">Abnormal</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <label>Remark</label>
-                            <textarea class="form-control" rows="2"></textarea>
-                            <hr>
-                        </div>
-<!--                    </div>-->
-                </div>
+                <div class="modal-body"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 <!--                    <button type="button" class="btn btn-primary">Understood</button>-->
