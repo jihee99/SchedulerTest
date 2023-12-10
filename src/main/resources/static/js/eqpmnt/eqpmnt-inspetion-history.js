@@ -43,25 +43,8 @@
                 xhr.setRequestHeader(_csrf_header, _csrf);
             },
             success: function (response) {
-                if(response.status == "success"){
-                    console.log(response);
-                    // $('#tableFragment').load('/eqpmnt/eqpmnt-inspection-hstry.html #table');
-                    let tbody = $('#tableFragment > div > table > tbody');
-                    tbody.empty(); // 기존 데이터 제거
-                    let row = '';
-                    response.list.forEach(function (data, index) {
-                        row += `<tr>`
-                            +`<td>${index + 1}</td>`
-                            +`<td>${data.obsvtr_nm}</td>`
-                            +`<td>${data.chck_flfmt_day}</td>`
-                            +`<td>${data.chck_flfr_nm}</td>`
-                            +`<td><i class="bi bi-list icon" data-hstry="${data.chck_flfmt_hstry_id}"></i></td>`
-                            +`</tr>`;
-                    });
-                    tbody.append(row);
-                }else{
-                    alert(response.message);
-                }
+                console.log(response)
+                $('#tableFragment').replaceWith(response);
             },
             error: function (xhr, status, error) {
                 console.log(error);
@@ -82,6 +65,7 @@
                 xhr.setRequestHeader(_csrf_header, _csrf);
             },
             success: function (response) {
+
                 if(response.status == "success"){
 
                     $(".modal-body").empty();

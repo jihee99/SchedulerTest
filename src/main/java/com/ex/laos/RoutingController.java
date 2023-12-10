@@ -1,9 +1,14 @@
 package com.ex.laos;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ex.laos.eqpmnt.service.EqpmntService;
@@ -44,10 +49,44 @@ public class RoutingController {
 		return modelAndView;
 	}
 
-	@GetMapping("/realtime/equipment/inspection/item")
-	public ModelAndView equipmentInspectionItem(){
-		ModelAndView modelAndView = new ModelAndView("eqpmnt/eqpmnt-Inspection-itm");
-		modelAndView.addObject("list", eqpmntService.selectEqpmntInspectionItemList());
-		return modelAndView;
+	@GetMapping("/realtime/eqpmnt/get/hstry/search")
+	public String selectEqpmntInspectionHistorySearchList(
+		@RequestParam("type") String type,
+		@RequestParam("station") String station,
+		@RequestParam("datefilter") String period
+		, Model model
+	){
+		// Map<String, Object> response = new HashMap<>();
+		// List<Map<String, String>> list = eqpmntService.selectEqpmntInspectionHistorySearchList(type, station, period);
+		// if(!list.isEmpty()){
+		// 	response.put("status", "success");
+		// 	response.put("list", list);
+		// }else{
+		// 	response.put("status", "error");
+		// 	response.put("message", "점검 이력 조회에 실패했습니다.");
+		// }
+		// return response;
+		model.addAttribute("list", eqpmntService.selectEqpmntInspectionHistorySearchList(type, station, period));
+		return "eqpmnt/eqpmnt-inspection-hstry :: tableFragment";
 	}
+
+
+	@GetMapping("/realtime/equipment/inspection/item")
+	public String equipmentInspectionItem(Model model){
+		// ModelAndView modelAndView = new ModelAndView("eqpmnt/eqpmnt-Inspection-itm");
+		// modelAndView.addObject("list", eqpmntService.selectEqpmntInspectionItemList());
+		model.addAttribute("list", eqpmntService.selectEqpmntInspectionItemList());
+		// return modelAndView;
+		return "eqpmnt/eqpmnt-inspection-itm";
+	}
+
+	@GetMapping("/realtime/eqpmnt/items/search")
+	public String insertEqpmntInspectionArtcl(
+		@RequestParam("type") String type,
+		Model model
+	){
+		model.addAttribute("list", eqpmntService.selectEqpmntInspectionItemListByType(type));
+		return "eqpmnt/eqpmnt-inspection-itm :: tableFragment";
+	}
+
 }

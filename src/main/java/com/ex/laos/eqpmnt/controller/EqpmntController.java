@@ -64,36 +64,26 @@ public class EqpmntController {
 		return response;
 	}
 
-	@GetMapping("/get/hstry/search")
-	public Map<String, Object> selectEqpmntInspectionHistorySearchList(
-		@RequestParam("type") String type,
-		@RequestParam("station") String station,
-		@RequestParam("datefilter") String period
-		// , Model model
-	){
-		Map<String, Object> response = new HashMap<>();
-
-		List<Map<String, String>> list = eqpmntService.selectEqpmntInspectionHistorySearchList(type, station, period);
-		if(!list.isEmpty()){
-			response.put("status", "success");
-			response.put("list", list);
-		}else{
-			response.put("status", "error");
-			response.put("message", "점검 이력 조회에 실패했습니다.");
-		}
-		// model.addAttribute("list",  eqpmntService.selectEqpmntInspectionHistorySearchList(type, station, period));
-		// return "eqpmnt/eqpmnt-Inspection-hstry :: #tableFragment";
-		return response;
-	}
-
-	// @GetMapping("/items/search")
-	// public String insertEqpmntInspectionArtcl(
+	// @GetMapping("/get/hstry/search")
+	// public Map<String, Object> selectEqpmntInspectionHistorySearchList(
 	// 	@RequestParam("type") String type,
-	// 	Model model
+	// 	@RequestParam("station") String station,
+	// 	@RequestParam("datefilter") String period
+	// 	// , Model model
 	// ){
-	// 	// List<EqpmntInspectionDto> list = eqpmntService.selectEqpmntInspectionItemListByType(type);
-	// 	model.addAttribute("list", eqpmntService.selectEqpmntInspectionItemListByType(type));
-	// 	return "eqpmnt/eqpmnt-Inspection-itm";
+	// 	Map<String, Object> response = new HashMap<>();
+	//
+	// 	List<Map<String, String>> list = eqpmntService.selectEqpmntInspectionHistorySearchList(type, station, period);
+	// 	if(!list.isEmpty()){
+	// 		response.put("status", "success");
+	// 		response.put("list", list);
+	// 	}else{
+	// 		response.put("status", "error");
+	// 		response.put("message", "점검 이력 조회에 실패했습니다.");
+	// 	}
+	// 	// model.addAttribute("list",  eqpmntService.selectEqpmntInspectionHistorySearchList(type, station, period));
+	// 	// return "eqpmnt/eqpmnt-Inspection-hstry :: #tableFragment";
+	// 	return response;
 	// }
 
 	@PostMapping("/items/register")
