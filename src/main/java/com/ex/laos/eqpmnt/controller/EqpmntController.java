@@ -86,6 +86,16 @@ public class EqpmntController {
 		return response;
 	}
 
+	// @GetMapping("/items/search")
+	// public String insertEqpmntInspectionArtcl(
+	// 	@RequestParam("type") String type,
+	// 	Model model
+	// ){
+	// 	// List<EqpmntInspectionDto> list = eqpmntService.selectEqpmntInspectionItemListByType(type);
+	// 	model.addAttribute("list", eqpmntService.selectEqpmntInspectionItemListByType(type));
+	// 	return "eqpmnt/eqpmnt-Inspection-itm";
+	// }
+
 	@PostMapping("/items/register")
 	public Map<String, String> insertEqpmntInspectionArtcl(
 		@ModelAttribute EqpmntInspectionDto dto

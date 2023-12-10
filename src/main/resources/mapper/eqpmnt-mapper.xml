@@ -180,7 +180,7 @@
     </select>
 
 
-    <select id="selectEqpmntInspectionItemList" resultType="map">
+    <select id="selectEqpmntInspectionItemList" resultType="com.ex.laos.eqpmnt.dto.EqpmntInspectionItem">
         SELECT
             A.CHCK_ARTCL_ID,
             A.CHCK_ARTCL_NM,
@@ -190,8 +190,25 @@
             CASE WHEN A.RGTR_ID != 'SYSTEM' THEN M.NM ELSE A.RGTR_ID END AS RGTR_NM
         FROM
             TEMP3.TBL_OBSVTR_EQPMNT_CHCK_ARTCL A
-                left JOIN TEMP3.TBL_MBR M ON M.MBR_ID = A.RGTR_ID
+        left JOIN TEMP3.TBL_MBR M ON M.MBR_ID = A.RGTR_ID
         WHERE
+            USE_YN = 'Y'
+        ORDER BY REG_DT DESC
+    </select>
+
+    <select id="selectEqpmntInspectionItemListByType" parameterType="string" resultType="com.ex.laos.eqpmnt.dto.EqpmntInspectionItem">
+        SELECT
+            A.CHCK_ARTCL_ID,
+            A.CHCK_ARTCL_NM,
+            A.CHCK_ARTCL_GUIDE,
+            A.OBSVTR_TYPE,
+            TO_CHAR(A.REG_DT, 'YYYY-MM-DD HH24:MI') AS REG_DT,
+            CASE WHEN A.RGTR_ID != 'SYSTEM' THEN M.NM ELSE A.RGTR_ID END AS RGTR_NM
+        FROM
+            TEMP3.TBL_OBSVTR_EQPMNT_CHCK_ARTCL A
+        left JOIN TEMP3.TBL_MBR M ON M.MBR_ID = A.RGTR_ID
+        WHERE
+            A.OBSVTR_TYPE = #{type} and
             USE_YN = 'Y'
         ORDER BY REG_DT DESC
     </select>

@@ -19,7 +19,9 @@ public interface EqpmntDao {
 
 	List<Map<String, String>> selectEqpmntInspectionHistorySearchList(Map<String, String> map);
 
-	List<Map<String, String>> selectEqpmntInspectionItemList();
+	List<EqpmntInspectionDto> selectEqpmntInspectionItemList();
+
+	List<EqpmntInspectionDto> selectEqpmntInspectionItemListByType(String type);
 
 	void insertEqpmntInspectionArtcl(EqpmntInspectionDto dto);
 }

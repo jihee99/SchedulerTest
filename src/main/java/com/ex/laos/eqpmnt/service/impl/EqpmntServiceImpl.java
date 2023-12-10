@@ -73,8 +73,13 @@ public class EqpmntServiceImpl implements EqpmntService {
 	}
 
 	@Override
-	public List<Map<String, String>> selectEqpmntInspectionItemList() {
+	public List<EqpmntInspectionDto> selectEqpmntInspectionItemList() {
 		return eqpmntDao.selectEqpmntInspectionItemList();
+	}
+
+	@Override
+	public List<EqpmntInspectionDto> selectEqpmntInspectionItemListByType(String type) {
+		return eqpmntDao.selectEqpmntInspectionItemListByType(type);
 	}
 
 	@Override

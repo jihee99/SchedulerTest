@@ -14,7 +14,9 @@ public interface EqpmntService {
 
 	List<Map<String, String>> selectEqpmntInspectionHistorySearchList(String type, String station, String period);
 
-	List<Map<String, String>> selectEqpmntInspectionItemList();
+	List<EqpmntInspectionDto> selectEqpmntInspectionItemList();
+
+	List<EqpmntInspectionDto> selectEqpmntInspectionItemListByType(String type);
 
 	void insertEqpmntInspectionArtcl(EqpmntInspectionDto dto);
 }
