@@ -14,6 +14,9 @@ spring:
     restart:
       enabled: true
   thymeleaf:
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
     cache: false
   mail:
     # Google smtp server 사용
