@@ -37,16 +37,24 @@ public class RoutingController {
 	public ModelAndView home() { return new ModelAndView("home"); }
 
 	@GetMapping("/update/pwd")
-	public ModelAndView updatePassword(){ return new ModelAndView("mngmt/updatePwd"); }
+	public String updatePassword(){
+		// return new ModelAndView("mngmt/updatePwd");
+	return "mngmt/updatePwd";
+	}
 
 	@GetMapping("/update/auth")
-	public ModelAndView updateAuth(){ return new ModelAndView("mngmt/updateAuth"); }
+	public String updateAuth(){
+		// return new ModelAndView("mngmt/updateAuth");
+		return "mngmt/updateAuth";
+	}
 
 	@GetMapping("/realtime/equipment/inspection/history")
-	public ModelAndView equipmentInspectionHistory(){
-		ModelAndView modelAndView = new ModelAndView("eqpmnt/eqpmnt-Inspection-hstry");
-		modelAndView.addObject("list", eqpmntService.selectEqpmntInspectionHistoryList());
-		return modelAndView;
+	public String equipmentInspectionHistory(Model model){
+		// ModelAndView modelAndView = new ModelAndView("eqpmnt/eqpmnt-Inspection-hstry");
+		// modelAndView.addObject("list", eqpmntService.selectEqpmntInspectionHistoryList());
+
+		model.addAttribute("list", eqpmntService.selectEqpmntInspectionHistoryList());
+		return "eqpmnt/eqpmnt-Inspection-hstry";
 	}
 
 	@GetMapping("/realtime/eqpmnt/get/hstry/search")
