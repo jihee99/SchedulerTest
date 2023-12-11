@@ -196,6 +196,7 @@
         ORDER BY REG_DT DESC
     </select>
 
+
     <select id="selectEqpmntInspectionItemListByType" parameterType="string" resultType="com.ex.laos.eqpmnt.dto.EqpmntInspectionItem">
         SELECT
             A.CHCK_ARTCL_ID,
@@ -208,7 +209,9 @@
             TEMP3.TBL_OBSVTR_EQPMNT_CHCK_ARTCL A
         left JOIN TEMP3.TBL_MBR M ON M.MBR_ID = A.RGTR_ID
         WHERE
-            A.OBSVTR_TYPE = #{type} and
+            <if test="type != 'Entire'">
+                A.OBSVTR_TYPE = #{type} and
+            </if>
             USE_YN = 'Y'
         ORDER BY REG_DT DESC
     </select>

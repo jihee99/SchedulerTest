@@ -75,8 +75,8 @@ public class RoutingController {
 	public String equipmentInspectionItem(Model model){
 		// ModelAndView modelAndView = new ModelAndView("eqpmnt/eqpmnt-Inspection-itm");
 		// modelAndView.addObject("list", eqpmntService.selectEqpmntInspectionItemList());
-		model.addAttribute("list", eqpmntService.selectEqpmntInspectionItemList());
 		// return modelAndView;
+		model.addAttribute("list", eqpmntService.selectEqpmntInspectionItemList());
 		return "eqpmnt/eqpmnt-inspection-itm";
 	}
 
