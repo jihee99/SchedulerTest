@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ex.laos.eqpmnt.dao.EqpmntDao;
 import com.ex.laos.eqpmnt.dto.EqpmntInspectionDto;
+import com.ex.laos.eqpmnt.dto.EqpmntInspectionItemDto;
 import com.ex.laos.eqpmnt.service.EqpmntService;
 
 import lombok.RequiredArgsConstructor;
@@ -91,5 +92,10 @@ public class EqpmntServiceImpl implements EqpmntService {
 			dto.setRgtrId(loggedInUserId);
 		}
 		eqpmntDao.insertEqpmntInspectionArtcl(dto);
+	}
+
+	@Override
+	public EqpmntInspectionItemDto selectEqpmntInspectionItemDetailById(String artclId) {
+		return eqpmntDao.selectEqpmntInspectionItemDetailById(artclId);
 	}
 }

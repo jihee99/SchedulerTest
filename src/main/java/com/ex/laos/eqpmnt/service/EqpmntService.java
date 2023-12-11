@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ex.laos.eqpmnt.dto.EqpmntInspectionDto;
+import com.ex.laos.eqpmnt.dto.EqpmntInspectionItemDto;
 
 public interface EqpmntService {
 
@@ -19,4 +20,6 @@ public interface EqpmntService {
 	List<EqpmntInspectionDto> selectEqpmntInspectionItemListByType(String type);
 
 	void insertEqpmntInspectionArtcl(EqpmntInspectionDto dto);
+
+	EqpmntInspectionItemDto selectEqpmntInspectionItemDetailById(String artclId);
 }

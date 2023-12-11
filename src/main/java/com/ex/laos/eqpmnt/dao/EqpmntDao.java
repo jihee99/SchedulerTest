@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ex.laos.eqpmnt.dto.EqpmntInspectionDto;
+import com.ex.laos.eqpmnt.dto.EqpmntInspectionItemDto;
 
 @Mapper
 public interface EqpmntDao {
@@ -24,4 +25,6 @@ public interface EqpmntDao {
 	List<EqpmntInspectionDto> selectEqpmntInspectionItemListByType(String type);
 
 	void insertEqpmntInspectionArtcl(EqpmntInspectionDto dto);
+
+	EqpmntInspectionItemDto selectEqpmntInspectionItemDetailById(String artclId);
 }

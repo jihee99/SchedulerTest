@@ -56,7 +56,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="data, i: ${list}">
+                            <tr th:each="data, i: ${list}" class="table-row" th:data-artcl="${data.chckArtclId}">
                                 <td th:text="${i.index + 1}"></td>
                                 <td th:text="${data.obsvtrType}"></td>
                                 <td th:text="${data.chckArtclNm}"></td>
@@ -72,8 +72,7 @@
         </div>
     </div>
 
-
-    <!--  detail modal  -->
+    <!--  register modal  -->
     <div class="modal fade" id="details" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -100,6 +99,39 @@
                 </div>
                 <div class="modal-footer">
                     <button id="regBtn" type="button" class="btn btn-primary">register</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  detail modal  -->
+    <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">Equipment inspection item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div th:fragment="modal-body" class="modal-body">
+                    <div id="detailModalBody">
+                        <div>
+                            <label for="detailType" class="my-2">Inspection Item Type</label>
+                            <select id="detailType" th:name="type" class="form-select mb-1" aria-label="">
+                                <option th:value="WL">Water level</option>
+                                <option th:value="RF">Rainfall</option>
+                                <option th:value="FM">Flow meter</option>
+                                <option th:value="CT">CCTV</option>
+                            </select>
+                            <label for="inspectionDetailNm" class="my-2">Inspection Item name</label>
+                            <input id="inspectionDetailNm" th:name="name" class="form-control mb-1" type="text">
+                            <label for="detailGuide" class="my-2">Inspection guide</label>
+                            <textarea id="detailGuide" class="form-control" th:name="guide" style="resize: none;" th:rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+<!--                    <button id="regBtn" type="button" class="btn btn-primary">register</button>-->
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>

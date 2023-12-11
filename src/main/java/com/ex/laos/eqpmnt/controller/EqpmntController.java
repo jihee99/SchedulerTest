@@ -101,4 +101,23 @@ public class EqpmntController {
 		}
 		return response;
 	}
+
+	@GetMapping("/items/details")
+	public Map<String, Object> insertEqpmntInspectionArtclDetailById(
+		@RequestParam("artclId") String artclId
+		// Model model
+	){
+		Map<String, Object> response = new HashMap<>();
+		try{
+			response.put("status", "success");
+			response.put("data", eqpmntService.selectEqpmntInspectionItemDetailById(artclId));
+		}catch (Exception e) {
+			response.put("status", "error");
+			response.put("message", "조회에 실패했습니다. 관리자에게 문의해주세요.");
+		}
+
+		return response;
+		// model.addAttribute("details", eqpmntService.selectEqpmntInspectionItemDetailById(artclId));
+		// return "eqpmnt/eqpmnt-inspection-itm :: detailModalBody";
+	}
 }

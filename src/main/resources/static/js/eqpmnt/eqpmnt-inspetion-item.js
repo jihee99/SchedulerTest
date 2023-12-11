@@ -8,7 +8,7 @@ let headers = {};
 
     $(document).on('click', '#searchBtn', function(e) {
         let formData = $("#search").serialize();
-        console.log(formData)
+
         $.ajax({
             type: "GET",
             url: "/realtime/eqpmnt/items/search",
@@ -31,7 +31,7 @@ let headers = {};
     $(document).on('click', '#regBtn', function(e) {
         let formData = $("#register").serialize();
         formData = formData.replace(/%0D%0A/g, "<br>");
-        console.log(formData)
+
         $.ajax({
             type: "POST",
             url: "/realtime/eqpmnt/items/register",
@@ -47,6 +47,40 @@ let headers = {};
                 }else{
                     alert(response.message);
                 }
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
+
+    $(document).on('click', '.table-row', function(e) {
+        const artclId = $(this).data('artcl');
+
+        $.ajax({
+            type: "GET",
+            url: "/realtime/eqpmnt/items/details",
+            data: {artclId : artclId},
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(_csrf_header, _csrf);
+            },
+            success: function (response) {
+
+                console.log(response)
+                if(response.status == 'success'){
+                    let data = response.data;
+
+                    $('#detailType').val(data.obsvtrType).prop('disabled', true);
+                    $('#inspectionDetailNm').val(data.chckArtclNm).prop('disabled', true);
+                    $('#detailGuide').val(data.chckArtclGuide).prop('disabled', true);
+
+                    $('#detailModal').modal('show');
+                }else{
+                    alert(response.message);
+                }
+                // $('#detailModalBody').html(response);
+                // $('#detailModal').modal('show');
             },
             error: function (xhr, status, error) {
                 console.log(error);

@@ -89,4 +89,5 @@ public class RoutingController {
 		return "eqpmnt/eqpmnt-inspection-itm :: tableFragment";
 	}
 
+
 }
