@@ -4,6 +4,9 @@ spring:
 #      jdbc-url: jdbc:log4jdbc:postgresql://192.168.0.6:5432/laos
 #      username: laos
 #      password: laos00
+#      jdbc-url: jdbc:log4jdbc:postgresql://192.168.0.6:5432/liwrms
+#      username: liwrms
+#      password: liwrms00
       jdbc-url: jdbc:log4jdbc:postgresql://localhost:5432/laos_test
       username: postgres
       password: postgres00

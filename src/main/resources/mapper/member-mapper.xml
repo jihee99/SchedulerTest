@@ -63,6 +63,13 @@
 
     </update>
 
+    <select id="selectUserRoleByUsername" parameterType="string">
+        SELECT B.ROLE_NM
+        FROM TEMP3.TBL_MBR_ROLE_MPPNG A
+                 JOIN TEMP3.TBL_ROLE B ON A.ROLE_ID = B.ROLE_ID
+        where A.MBR_ID = #{username}
+    </select>
+
 <!--    <resultMap id="pswdChangeResultMap" type="java.util.UUID">-->
 <!--        <id property="pswdChgId" column="pswd_chg_id"/>-->
 <!--    </resultMap>-->

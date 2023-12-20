@@ -23,8 +23,8 @@ public class LoginSuccessHandler  extends SimpleUrlAuthenticationSuccessHandler 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		System.out.println("d이걸 탔을까요?? 아닐까요~!@!~");
-		defaultRedirectStrategy.sendRedirect(request, response, "/home");
 		try {
+			defaultRedirectStrategy.sendRedirect(request, response, "/home");
 			super.onAuthenticationSuccess(request, response, authentication);
 		} catch (ServletException e) {
 			throw new RuntimeException(e);

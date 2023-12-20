@@ -1,10 +1,16 @@
 package com.ex.laos.common.dto;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+import javax.management.relation.Role;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +48,8 @@ public class MemberDto {
 
 	private String sevcAuthrtId;	// 서비스 권한
 
+	private Collection<SimpleGrantedAuthority> authorities;
+	private List<Role> roles;
 
 // 	@Builder
 // 	public MemberFormDto toEntity(String mbrId, String pswd, String nm, String telno, String ogdp, String stts, Date regDt, String sevcAuthrtId){

@@ -28,6 +28,7 @@ public class SecurityConfig {
 
 	// public SecurityConfig(CustomUserDetailsService userDetailsService) {
 	// 	this.userDetailsService = userDetailsService;
+	//	// RequiredArgsConstructor 을 붙이지 않으면 자동 빈 주입이 되지 않기 때문에 지정해줘야한다.
 	// }
 
 	// 패스워드 인코더로 사용할 빈 등록
@@ -51,7 +52,11 @@ public class SecurityConfig {
 				authorizeRequests
 					.antMatchers("/realtime/eqpmnt/get/hstry/search").permitAll() // 특정 URL에 대한 권한 부여
 					.antMatchers("/realtime/**").permitAll()
-					.antMatchers("/favicon.ico", "/ko", "/lecture", "/css/**", "/js/**", "/join", "/join/member", "/password/**").permitAll()
+					.antMatchers( "/ko", "/lecture", "/css/**", "/js/**", "/password/**").permitAll()
+					// .antMatchers("/realtime/**").hasAnyRole("REAL_TIME")			// 테스트용
+					.antMatchers("/eqpmnt/**").hasAnyRole("EQUIPMENT")
+					.antMatchers("/mngmnt/**").hasAnyRole("QUALITY_MANAGE")
+					.antMatchers("/join", "/join/member").anonymous()
 					.anyRequest().authenticated()
 			)
 				// 로그인 설정

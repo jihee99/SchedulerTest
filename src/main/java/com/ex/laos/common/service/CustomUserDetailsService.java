@@ -1,9 +1,12 @@
 package com.ex.laos.common.service;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 		MemberDto member = memberDao.findByUserId(username);
 		if (member == null) {
 			throw new UsernameNotFoundException("User not found with username : " + username);
+		}else{
+			String[] strRole = {};
+			Collection<GrantedAuthority> role = AuthorityUtils.createAuthorityList(strRole);
+
 		}
 		return new CustomUserDetails(member);
 	}
