@@ -40,7 +40,7 @@ public class DamController {
 			String filePath = apiService.apiExcelFileDownload();
 			if (Files.exists(Paths.get(filePath))) {
 				// 파일이 존재하면 uploadPreviousData 서비스 호출
-				damService.uploadPreviousData(filePath, "NamNgum1", previousDays);
+				// damService.uploadPreviousData(filePath, "NamNgum1", previousDays);
 				log.info("File exists and uploaded successfully. file Path: {}", filePath);
 			} else {
 				log.info("File does not exist at: {}", filePath);

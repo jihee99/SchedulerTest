@@ -8,12 +8,12 @@
         SELECT
             TD.DAM_ID::varchar ,
             TD.DAM_NM
-        FROM TEMP3.TBL_DAM TD
+        FROM PUBLIC.TBL_DAM TD
         WHERE TD.DAM_NM = #{damName}
     </select>
 
     <insert id="insertDamObservationDtoList" parameterType="com.ex.laos.dam.dto.DamObservationDto">
-        INSERT INTO temp3.tbl_dam_obsrvn_hstry
+        INSERT INTO PUBLIC.tbl_dam_obsrvn_hstry
             (
              dam_id,
              obsrvn_ymd,
@@ -49,7 +49,7 @@
 
     <update id="upsertLastFiveDaysDamObservationDtoList" parameterType="java.util.List">
         <foreach collection="list" item="item" separator=";">
-            INSERT INTO temp3.tbl_dam_obsrvn_hstry
+            INSERT INTO PUBLIC.tbl_dam_obsrvn_hstry
                 (
                 dam_id,
                 obsrvn_ymd,

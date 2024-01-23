@@ -317,6 +317,9 @@ public class DamServiceImpl2 implements DamService {
 		if(selected.equals("NamLik12")){
 			adjustedDamName = "Nam Lik 1/2";
 		}
+		if(selected.equals("NamPhai")){
+			adjustedDamName = "Nam Phay";
+		}
 		return  adjustedDamName;
 	}
 	private String findDamId(String adjustedDamName){
@@ -325,4 +328,6 @@ public class DamServiceImpl2 implements DamService {
 
 		return result.get("dam_id");
 	}
+
+
 }

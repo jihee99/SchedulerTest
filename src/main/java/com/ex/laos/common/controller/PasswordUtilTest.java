@@ -16,7 +16,6 @@ public class PasswordUtilTest {
 
 	public static void main(String[] args){
 		String rawPassword = "testpassword";
-
 		// 암호화된 비밀번호 생성
 		String encodedPassword = encodePassword(rawPassword);
 		System.out.println("Encoded Password: " + encodedPassword);
