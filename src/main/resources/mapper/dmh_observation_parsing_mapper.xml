@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ex.laos.dmh.mapper.DmhObservationDataParsingMapper">
+
+    <select id="selectWLObsvtrIdByObsvtrNm" parameterType="string" resultType="string">
+        SELECT
+            WL_OBSVTR_ID
+        FROM
+            PUBLIC.TBL_WL_OBSVTR
+        WHERE WL_OBSVTR_NM = #{obsvtrNm}
+    </select>
+
+    <select id="selectRFObsvtrIdByObsvtrNm" parameterType="string" resultType="string">
+        SELECT
+            RF_OBSVTR_ID
+        FROM
+            PUBLIC.TBL_RF_OBSVTR
+        WHERE RF_OBSVTR_NM = #{obsvtrNm}
+    </select>
+
+    <select id="selectFMObsvtrIdByObsvtrNm" parameterType="string" resultType="string">
+        SELECT
+            FM_OBSVTR_ID
+        FROM
+            PUBLIC.TBL_FM_OBSVTR
+        WHERE FM_OBSVTR_NM = #{obsvtrNm}
+    </select>
+
+    <insert id="insertWaterLevelObservationDataList" parameterType="com.ex.laos.dmh.dto.DmhObservationData">
+        INSERT INTO
+            PUBLIC.TBL_WL_OBSRVN_HSTRY
+            (WL_OBSVTR_ID,
+             QLTY_CD,
+             OBS_WL,
+             obsrvn_dt,
+             REG_DT)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.obsvtrId}::uuid,
+             '0100',
+             #{item.obsVal},
+             TO_TIMESTAMP(#{item.observationDate}, 'YYYY-MM-DD HH24:MI:SS'),
+             now())
+        </foreach>
+    </insert>
+
+    <insert id="insertRainfallObservationDataList" parameterType="com.ex.laos.dmh.dto.DmhObservationData">
+        INSERT INTO
+        PUBLIC.TBL_RF_OBSRVN_HSTRY
+            (RF_OBSVTR_ID,
+            QLTY_CD,
+            OBS_RF_AMT,
+            OBSRVN_DT,
+            REG_DT)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.obsvtrId}::uuid,
+            '0100',
+            #{item.obsVal},
+            TO_TIMESTAMP(#{item.observationDate}, 'YYYY-MM-DD HH24:MI:SS'),
+            now())
+        </foreach>
+    </insert>
+
+    <insert id="insertFlowmeterObservationDataList" parameterType="com.ex.laos.dmh.dto.DmhObservationData">
+        INSERT INTO
+        PUBLIC.TBL_FM_OBSRVN_HSTRY
+            (FM_OBSVTR_ID,
+            QLTY_CD,
+            FM,
+            OBSRVN_DT,
+            REG_DT)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.obsvtrId}::uuid,
+            '0100',
+            #{item.obsVal},
+            TO_TIMESTAMP(#{item.observationDate}, 'YYYY-MM-DD HH24:MI:SS'),
+            now())
+        </foreach>
+    </insert>
+
+    <update id="updateWaterLevelObservatoryData" parameterType="com.ex.laos.dmh.dto.DmhObservatory">
+        UPDATE
+            PUBLIC.TBL_WL_OBSVTR
+        SET
+            PSN_DATA_BGNG_YMD = #{psnDataBgngYmd},
+            PSN_DATA_END_YMD = #{psnDataEndYmd}
+        WHERE
+            WL_OBSVTR_ID = #{obsvtrId} ::uuid
+    </update>
+
+    <update id="updateRainfallObservatoryData" parameterType="com.ex.laos.dmh.dto.DmhObservatory">
+        UPDATE
+            PUBLIC.TBL_RF_OBSVTR
+        SET
+            PSN_DATA_BGNG_YMD = #{psnDataBgngYmd},
+            PSN_DATA_END_YMD = #{psnDataEndYmd}
+        WHERE
+            RF_OBSVTR_ID = #{obsvtrId} ::uuid
+    </update>
+
+    <update id="updateFlowmeterObservatoryData" parameterType="com.ex.laos.dmh.dto.DmhObservatory">
+        UPDATE
+            PUBLIC.TBL_FM_OBSVTR
+        SET
+            PSN_DATA_BGNG_YMD = #{psnDataBgngYmd},
+            PSN_DATA_END_YMD = #{psnDataEndYmd}
+        WHERE
+            FM_OBSVTR_ID = #{obsvtrId} ::uuid
+    </update>
+
+</mapper>

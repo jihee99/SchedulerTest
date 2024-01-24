@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ex.laos.dmh.mapper.DmhFileParsingMapper">
+
+
+<!--    <insert id="insertTnEvaporation" parameterType="com.example.laos.vo.TnDmhEvaporationVO">-->
+<!--        INSERT INTO TEMP.TN_DMH_EVAPORATION (station, obs_dt, obs_val, mean_Min_Temp, mean_Max_Temp) VALUES-->
+<!--            (-->
+<!--                #{station},-->
+<!--                TO_DATE(CONCAT(#{year},'/',#{month},'/',#{day}), 'YYYY/MM/DD'),-->
+<!--                #{obsVal},-->
+<!--                #{meanMinTemp},-->
+<!--                #{meanMaxTemp},-->
+<!--                #{uuid}::uuid-->
+<!--            )-->
+<!--    </insert>-->
+<!--    <insert id="insertTnRainfall" parameterType="com.example.laos.vo.TnDmhRainfallVO">-->
+<!--        INSERT INTO TEMP.TN_DMH_RAINFALL (station, obs_dt, rf) VALUES-->
+<!--            (-->
+<!--                #{station},-->
+<!--                TO_DATE(CONCAT(#{year},'/',#{month},'/',#{day}), 'YYYY/MM/DD'),-->
+<!--                #{rainfall},-->
+<!--                #{uuid}::uuid-->
+<!--            )-->
+<!--    </insert>-->
+<!--    <insert id="insertTnWaterlevel" parameterType="com.example.laos.vo.TnDmhWaterlevelVO">-->
+<!--        INSERT INTO TEMP.TN_DMH_WATERLEVEL (station, obs_dt, waterlevel, discharge) VALUES-->
+<!--            (-->
+<!--                #{station},-->
+<!--                TO_DATE(CONCAT(#{year},'/',#{month},'/',#{day}), 'YYYY/MM/DD'),-->
+<!--                #{waterlevel},-->
+<!--                #{discharge},-->
+<!--                #{uuid}::uuid-->
+<!--            )-->
+<!--    </insert>-->
+
+
+
+<!--    &lt;!&ndash; 재생성 &ndash;&gt;-->
+<!--    <select id="getDmhTnEvaporationData" resultType="map">-->
+<!--        SELECT-->
+<!--            STATION,-->
+<!--            COUNT(*)::VARCHAR as TOTAL,-->
+<!--            EXTRACT(YEAR FROM MAX(OBS_DT))::VARCHAR AS MAX_DT,-->
+<!--            EXTRACT(YEAR FROM MIN(OBS_DT))::VARCHAR AS MIN_DT-->
+<!--        FROM TEMP.TN_DMH_EVAPORATION-->
+<!--        GROUP BY STATION-->
+<!--        ORDER BY STATION ASC-->
+<!--    </select>-->
+<!--    <select id="getDmhTnEvaporation" resultType="com.example.laos.vo.dmgDownload.TnDmhEvaporationDownloadVO">-->
+<!--        SELECT STATION,TO_CHAR(OBS_DT, 'YYYY-MM-DD') AS OBS_DT,OBS_VAL,MEAN_MIN_TEMP,MEAN_MAX_TEMP FROM TEMP.TN_DMH_EVAPORATION ORDER BY STATION ASC, OBS_DT ASC;-->
+<!--    </select>-->
+
+<!--    <select id="getDmhTnRainfallData" resultType="map">-->
+<!--        SELECT-->
+<!--            STATION,-->
+<!--            COUNT(*)::VARCHAR as TOTAL,-->
+<!--            EXTRACT(YEAR FROM MAX(OBS_DT))::VARCHAR AS MAX_DT,-->
+<!--            EXTRACT(YEAR FROM MIN(OBS_DT))::VARCHAR AS MIN_DT-->
+<!--        FROM TEMP.TN_DMH_RAINFALL-->
+<!--        GROUP BY STATION-->
+<!--        ORDER BY STATION ASC-->
+<!--    </select>-->
+<!--    <select id="getDmhTnRainfall" resultType="com.example.laos.vo.dmgDownload.TnDmhRainfallDownloadVO">-->
+<!--        SELECT STATION,TO_CHAR(OBS_DT, 'YYYY-MM-DD') AS OBS_DT,RF FROM TEMP.TN_DMH_RAINFALL ORDER BY STATION ASC, OBS_DT ASC;-->
+<!--    </select>-->
+
+<!--    <select id="getDmhTnWaterlevelData" resultType="map">-->
+<!--        SELECT-->
+<!--            STATION,-->
+<!--            COUNT(*)::VARCHAR as TOTAL,-->
+<!--            EXTRACT(YEAR FROM MAX(OBS_DT))::VARCHAR AS MAX_DT,-->
+<!--            EXTRACT(YEAR FROM MIN(OBS_DT))::VARCHAR AS MIN_DT-->
+<!--        FROM TEMP.TN_DMH_WATERLEVEL-->
+<!--        GROUP BY STATION-->
+<!--        ORDER BY STATION ASC-->
+<!--    </select>-->
+<!--    <select id="getDmhTnWaterlevel" resultType="com.example.laos.vo.dmgDownload.TnDmhWaterlevelDownloadVO">-->
+<!--        SELECT STATION,TO_CHAR(OBS_DT, 'YYYY-MM-DD') AS OBS_DT,WATERLEVEL,DISCHARGE FROM TEMP.TN_DMH_WATERLEVEL ORDER BY STATION ASC, OBS_DT ASC;-->
+<!--    </select>-->
+
+
+
+</mapper>

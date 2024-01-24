@@ -39,57 +39,57 @@ public class DamServiceImpl2 implements DamService {
 	 *
 	 * 	@param selected  업로드 하고자 하는 댐 명칭 ( 시트 명으로 사용 )
 	 */
-	@Override
-	public void uploadOldDataToDatabase(String selected) {
-
-		String excelPath = filePath + "NamMang3.xlsx";
-		try (
-			ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(excelPath)))
-		) {
-			Sheet sheet = workbook.getFirstSheet();
-			ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
-			String damId = findDamId(adjustDamNameForDatabase(selected));
-			if (sheet != null) {
-
-				// 첫 번째 행 제외 후 각 행 별로 반복
-				try (Stream<Row> rowStream = sheet.openStream().skip(1)) {
-					rowStream.forEach(row -> {
-						DamObservationDto damObservationDto = new DamObservationDto();
-						damObservationDto.setDamId(damId);
-
-						int cellIndex = 0;
-						// 각 셀별로 반복
-						for (Cell cell : row) {
-
-							if (cellIndex == 0) {
-								cellIndex++;
-								continue;
-							}
-							processCell(damObservationDto, cell, cellIndex-1);
-							cellIndex++;
-						}
-						damObservationDto.setRf(BigDecimal.ZERO);
-
-						damObservationDtoArrayList.add(damObservationDto);
-						if (row.getRowNum() % 1000 == 0) {
-							damDao.insertDamObservationDtoList(damObservationDtoArrayList);
-							damObservationDtoArrayList.clear();
-						}
-					});
-					if(!damObservationDtoArrayList.isEmpty() ){
-						damDao.insertDamObservationDtoList(damObservationDtoArrayList);
-					}
-				}
-
-			}
-
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
-	}
+	// @Override
+	// public void uploadOldDataToDatabase(String selected) {
+	//
+	// 	String excelPath = filePath + "NamMang3.xlsx";
+	// 	try (
+	// 		ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(excelPath)))
+	// 	) {
+	// 		Sheet sheet = workbook.getFirstSheet();
+	// 		ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
+	// 		String damId = findDamId(adjustDamNameForDatabase(selected));
+	// 		if (sheet != null) {
+	//
+	// 			// 첫 번째 행 제외 후 각 행 별로 반복
+	// 			try (Stream<Row> rowStream = sheet.openStream().skip(1)) {
+	// 				rowStream.forEach(row -> {
+	// 					DamObservationDto damObservationDto = new DamObservationDto();
+	// 					damObservationDto.setDamId(damId);
+	//
+	// 					int cellIndex = 0;
+	// 					// 각 셀별로 반복
+	// 					for (Cell cell : row) {
+	//
+	// 						if (cellIndex == 0) {
+	// 							cellIndex++;
+	// 							continue;
+	// 						}
+	// 						processCell(damObservationDto, cell, cellIndex-1);
+	// 						cellIndex++;
+	// 					}
+	// 					damObservationDto.setRf(BigDecimal.ZERO);
+	//
+	// 					damObservationDtoArrayList.add(damObservationDto);
+	// 					if (row.getRowNum() % 1000 == 0) {
+	// 						damDao.insertDamObservationDtoList(damObservationDtoArrayList);
+	// 						damObservationDtoArrayList.clear();
+	// 					}
+	// 				});
+	// 				if(!damObservationDtoArrayList.isEmpty() ){
+	// 					damDao.insertDamObservationDtoList(damObservationDtoArrayList);
+	// 				}
+	// 			}
+	//
+	// 		}
+	//
+	// 	} catch (FileNotFoundException e) {
+	// 		throw new RuntimeException(e);
+	// 	} catch (IOException e) {
+	// 		throw new RuntimeException(e);
+	// 	}
+	//
+	// }
 
 
 	/**
@@ -99,7 +99,7 @@ public class DamServiceImpl2 implements DamService {
 	 */
 	@Override
 	public void registerAllData(String selected) {
-		String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
+		String excelPath = filePath + "20240123140912.xlsx";
 		try (ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(excelPath)))) {
 			// Get the sheet by name
 			Sheet sheet = findSheetByName(workbook, selected);
@@ -122,7 +122,17 @@ public class DamServiceImpl2 implements DamService {
 							processCell(damObservationDto, cell, cellIndex);
 							cellIndex++;
 						}
-						damObservationDtoArrayList.add(damObservationDto);
+
+						LocalDate obsrvnYmd = LocalDate.parse(damObservationDto.getObsrvnYmd(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+						if (obsrvnYmd.isAfter(LocalDate.now())) {
+							// 관측 날짜가 현재 날짜보다 이후이면 반복 중단
+							System.out.println("관측 날짜가 현재 날짜보다 이후이므로 데이터 로딩을 중단합니다.");
+							return;
+						}else{
+							damObservationDtoArrayList.add(damObservationDto);
+						}
+
 						if (row.getRowNum() % 1000 == 0) {
 							damDao.insertDamObservationDtoList(damObservationDtoArrayList);
 							damObservationDtoArrayList.clear();
@@ -152,58 +162,58 @@ public class DamServiceImpl2 implements DamService {
 	 * @param selected     선택된 댐 명칭
 	 * @param previousDays 선택된 기준일로부터의 이전 날짜 범위 (일 수)
 	 */
-	@Override
-	public void uploadPreviousData(String filePath, String selected, int previousDays) {
-		// String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
-		try (ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(filePath)))) {
-
-			Sheet sheet = findSheetByName(workbook, selected);
-
-			ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
-
-			String damId = findDamId(adjustDamNameForDatabase(selected));
-			if (sheet != null) {
-				System.out.println("Sheet Name: " + selected);
-
-				// 각 행별로 반복
-				// 단 첫 번째 행 제외
-				try (Stream<Row> rowStream = sheet.openStream().skip(1)) {
-					// 오늘 날짜부터 5일 전까지의(가변) 데이터 대상
-					LocalDate endDate = LocalDate.now();
-					// LocalDate endDate = endDate2.minusDays(previousDays);
-					LocalDate startDate = endDate.minusDays(previousDays);
-
-					rowStream.forEach(row -> {
-						DamObservationDto damObservationDto = new DamObservationDto();
-						damObservationDto.setDamId(damId);
-
-						int cellIndex = 0;
-						// 각 셀별로 반복
-						for (Cell cell : row) {
-							processCell(damObservationDto, cell, cellIndex);
-							cellIndex++;
-						}
-
-						LocalDate obsrvnYmd = LocalDate.parse(damObservationDto.getObsrvnYmd(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-						if (obsrvnYmd.isAfter(startDate) && obsrvnYmd.isBefore(endDate) || obsrvnYmd.isEqual(endDate)) {
-							damObservationDtoArrayList.add(damObservationDto);
-							System.out.println(damObservationDto);
-						}
-
-					});
-					damDao.upsertLastFiveDaysDamObservationDtoList(damObservationDtoArrayList);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-				System.out.println("Sheet not found: " + selected);
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	// @Override
+	// public void uploadPreviousData(String filePath, String selected, int previousDays) {
+	// 	// String excelPath = filePath + "Download_by_GoogleDriveAPI.xlsx";
+	// 	try (ReadableWorkbook workbook = new ReadableWorkbook(new FileInputStream(new File(filePath)))) {
+	//
+	// 		Sheet sheet = findSheetByName(workbook, selected);
+	//
+	// 		ArrayList<DamObservationDto> damObservationDtoArrayList = new ArrayList<>();
+	//
+	// 		String damId = findDamId(adjustDamNameForDatabase(selected));
+	// 		if (sheet != null) {
+	// 			System.out.println("Sheet Name: " + selected);
+	//
+	// 			// 각 행별로 반복
+	// 			// 단 첫 번째 행 제외
+	// 			try (Stream<Row> rowStream = sheet.openStream().skip(1)) {
+	// 				// 오늘 날짜부터 5일 전까지의(가변) 데이터 대상
+	// 				LocalDate endDate = LocalDate.now();
+	// 				// LocalDate endDate = endDate2.minusDays(previousDays);
+	// 				LocalDate startDate = endDate.minusDays(previousDays);
+	//
+	// 				rowStream.forEach(row -> {
+	// 					DamObservationDto damObservationDto = new DamObservationDto();
+	// 					damObservationDto.setDamId(damId);
+	//
+	// 					int cellIndex = 0;
+	// 					// 각 셀별로 반복
+	// 					for (Cell cell : row) {
+	// 						processCell(damObservationDto, cell, cellIndex);
+	// 						cellIndex++;
+	// 					}
+	//
+	// 					LocalDate obsrvnYmd = LocalDate.parse(damObservationDto.getObsrvnYmd(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	// 					if (obsrvnYmd.isAfter(startDate) && obsrvnYmd.isBefore(endDate) || obsrvnYmd.isEqual(endDate)) {
+	// 						damObservationDtoArrayList.add(damObservationDto);
+	// 						System.out.println(damObservationDto);
+	// 					}
+	//
+	// 				});
+	// 				damDao.upsertLastFiveDaysDamObservationDtoList(damObservationDtoArrayList);
+	//
+	// 			} catch (IOException e) {
+	// 				e.printStackTrace();
+	// 			}
+	// 		} else {
+	// 			System.out.println("Sheet not found: " + selected);
+	// 		}
+	//
+	// 	} catch (IOException e) {
+	// 		e.printStackTrace();
+	// 	}
+	// }
 
 	private void processCell(DamObservationDto damObservationDto, Cell cell, int cellIndex) {
 		String cellValue = getCellValueAsString(cell);
@@ -292,7 +302,6 @@ public class DamServiceImpl2 implements DamService {
 
 
 
-
 	private static Sheet findSheetByName(ReadableWorkbook workbook, String sheetName) {
 		return workbook.getSheets()
 			.filter(sheet -> sheet.getName().equals(sheetName))
@@ -322,6 +331,7 @@ public class DamServiceImpl2 implements DamService {
 		}
 		return  adjustedDamName;
 	}
+
 	private String findDamId(String adjustedDamName){
 
 		Map<String, String> result = damDao.getDamId(adjustedDamName);

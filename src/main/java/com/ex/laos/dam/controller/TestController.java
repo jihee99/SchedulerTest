@@ -38,10 +38,10 @@ public class TestController {
 	// 	damService.uploadPreviousData(selected, previousDays);
 	// }
 
-	@GetMapping("/update3/{selected}")
-	public void uploadOldDataToDatabase(@PathVariable("selected") String selected) {
-		damService.uploadOldDataToDatabase(selected);
-	}
+	// @GetMapping("/update3/{selected}")
+	// public void uploadOldDataToDatabase(@PathVariable("selected") String selected) {
+	// 	damService.uploadOldDataToDatabase(selected);
+	// }
 
 	// @GetMapping("/google/api/download")
 	// public void cronTest() {
